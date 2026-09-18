@@ -1,0 +1,14 @@
+\section{Validação Funcional e Testbenches}
+
+Em conformidade com as diretrizes do projeto, cada componente do processador foi submetido a baterias de testes unitários através de módulos de *testbench* dedicados.
+
+\subsection{Testes Unitários dos Componentes}
+\begin{itemize}
+    \item \texttt{tb\_alu.v}: Valida as operações aritméticas e lógicas, além do sinal de \textit{Zero Flag} com vetores de teste cobrindo casos limites (como valores negativos e subtração com resultado nulo).
+    \item \texttt{tb\_reg\_file.v}: Testa a escrita síncrona e a leitura assíncrona simultânea em registradores distintos, assegurando que o registrador \texttt{\$zero} permaneça imutável com valor fixo 0.
+    \item \texttt{tb\_control\_unit.v}: Atesta a decodificação exata de cada combinação de \texttt{opcode} e \texttt{funct}, verificando a consistência dos sinais de multiplexação.
+    \item \texttt{tb\_instr\_mem.v}: Confere a leitura correta das instruções a partir de endereços alinhados por palavra de 32 bits.
+\end{itemize}
+
+\subsection{Integração Top-Level e Simulação Geral}
+O módulo de topo (\texttt{tb\_mips\_monociclo\_top.v}) carrega o código de máquina gerado a partir do algoritmo de ordenação (\texttt{sort\_swap.hex} / \texttt{machine\_code.bin}). A simulação confirma a evolução sequencial do Program Counter, os desvios condicionais (\texttt{beq}, \texttt{bne}) e os saltos incondicionais até o encerramento do programa.

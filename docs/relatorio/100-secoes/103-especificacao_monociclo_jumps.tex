@@ -1,0 +1,19 @@
+\section{Especificação do Caminho de Dados e Instruções de Salto}
+
+A arquitetura monociclo executa exatamente uma instrução por ciclo de clock. A estrutura modular dos blocos funcionais foi implementada em Verilog HDL \cite{verilog_std} utilizando parâmetros configuráveis (\texttt{parameter}) para larguras de barramento de dados e endereçamento.
+
+\subsection{Organização Modular dos Blocos Funcionais}
+O processador divide-se nos seguintes submódulos principais:
+\begin{itemize}
+    \item \textbf{Banco de Registradores (\textit{Register File}):} Contém 32 registradores de 32 bits com duas portas de leitura assíncronas e uma porta de escrita síncrona sensível à borda de subida do clock.
+    \item \textbf{Unidade Lógica e Aritmética (ALU):} Bloco combinacional parametrizado capaz de realizar operações lógicas (\texttt{AND}, \texttt{OR}), aritméticas (\texttt{ADD}, \texttt{SUB}) e comparações (\texttt{SLT}).
+    \item \textbf{Unidade de Controle:} Decodifica o campo \texttt{opcode} e gera os sinais de controle essenciais (\texttt{RegDst}, \texttt{Branch}, \texttt{MemRead}, \texttt{MemtoReg}, \texttt{ALUOp}, \texttt{MemWrite}, \texttt{ALUSrc}, \texttt{RegWrite}, \texttt{Jump}).
+\end{itemize}
+
+\subsection{Implementação das Instruções de Desvio (Jumps)}
+Para suportar laços aninhados e chamadas de funções identificadas na primeira entrega, foram incorporadas as seguintes instruções de controle de fluxo:
+\begin{itemize}
+    \item \texttt{j} (Jump incondicional tipo-J): O endereço alvo de 32 bits é formado concatenando os 4 bits mais significativos do endereço atual do Program Counter (\texttt{PC+4[31:28]}), os 26 bits do campo imediato deslocados de 2 posições para a esquerda (\texttt{instr[25:0] << 2}).
+    \item \texttt{jal} (Jump and Link): Além do salto incondicional, preserva o endereço de retorno \texttt{PC+4} no registrador \texttt{\$ra} (\texttt{\$31}).
+    \item \texttt{jr} (Jump Register tipo-R): Permite o retorno de funções carregando o Program Counter diretamente a partir do conteúdo do registrador especificado (\texttt{PC <= Reg[rs]}).
+\end{itemize}

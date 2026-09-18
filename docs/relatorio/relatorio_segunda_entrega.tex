@@ -1,0 +1,92 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{url}
+
+\usepackage{listings}
+
+% Configuração de estilo visual para código C
+\lstdefinestyle{estiloC}{
+    language=C,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{purple},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=6pt,
+    backgroundcolor=\color{gray!6},
+    frame=single,
+    rulecolor=\color{black!30},
+    tabsize=2,
+    breaklines=true,
+    showstringspaces=false,
+    captionpos=b
+}
+
+% Configuração de estilo visual para código MIPS Assembly
+\lstdefinestyle{estiloMIPS}{
+    morekeywords={sll, add, addi, sub, lw, sw, beq, bne, j, jal, jr, slt, slti, nop},
+    sensitive=false,
+    morecomment=[l]{\#},
+    morestring=[b]",
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{purple},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=6pt,
+    backgroundcolor=\color{gray!6},
+    frame=single,
+    rulecolor=\color{black!30},
+    tabsize=4,
+    breaklines=true,
+    showstringspaces=false,
+    captionpos=b
+}
+
+% Configuração de estilo visual para descrição em Verilog HDL
+\lstdefinestyle{estiloVerilog}{
+    language=Verilog,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{purple},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=6pt,
+    backgroundcolor=\color{gray!6},
+    frame=single,
+    rulecolor=\color{black!30},
+    tabsize=2,
+    breaklines=true,
+    showstringspaces=false,
+    captionpos=b
+}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\input{100-secoes/100-metadados}
+
+\maketitle
+
+\input{100-secoes/101-introducao}
+\input{100-secoes/102-ambiente_desenvolvimento}
+\input{100-secoes/103-especificacao_monociclo_jumps}
+\input{100-secoes/104-testbenches_resultados}
+\input{100-secoes/105-consideracoes_finais}
+
+\input{100-secoes/106-bibliografia}
+
+\end{document}
