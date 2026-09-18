@@ -1,0 +1,52 @@
+# ==============================================================================
+# .gitignore - Projeto MIPS Monociclo (Entrega 02)
+# ==============================================================================
+
+# --- Simulação RTL (Icarus Verilog & GTKWave) ---
+*.vvp
+*.vcd
+sim_*.vcd
+dump.vcd
+a.out
+
+# --- Síntese e Compilação Intel Quartus Prime ---
+quartus/db/
+quartus/incremental_db/
+quartus/output_files/
+db/
+incremental_db/
+output_files/
+*.rpt
+*.done
+*.summary
+*.jdi
+*.pin
+*.sof
+*.pof
+*.qws
+*.smsg
+*.chg
+*.qdf
+*.bak
+
+# --- Documentação e Compilação LaTeX (Tectonic / TeX) ---
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.run.xml
+*-blx.bib
+
+# --- Sistema Operacional e Editores / IDEs ---
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+.vscode/
+.idea/
