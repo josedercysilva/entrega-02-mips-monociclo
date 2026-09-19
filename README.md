@@ -44,9 +44,10 @@ A tabela a seguir documenta as ferramentas utilizadas no ciclo de desenvolviment
 ## Estrutura do Repositório
 
 ```text
+
 .
 ├── contexto
-│   ├── especifiaao-entrega2-integra-classroom.md
+│   ├── especificacao-entrega2-integra-classroom.md
 │   ├── especificacao-geral-disciplina.md
 │   ├── projeto-arquitetura-integra.md
 │   └── rubricas-entrega-02.md
@@ -78,13 +79,20 @@ A tabela a seguir documenta as ferramentas utilizadas no ciclo de desenvolviment
 │       ├── README.md
 │       ├── relatorio_segunda_entrega.pdf
 │       └── relatorio_segunda_entrega.tex
+├── .gemini
+│   └── rules.md
+├── .github
+│   └── PULL_REQUEST_TEMPLATE.md
+├── .gitignore
 ├── hex
 │   ├── machine_code.bin
 │   └── sort_swap.hex
+├── LICENSE
 ├── quartus
 │   ├── mips_monociclo.qpf
 │   └── mips_monociclo.qsf
 ├── README.md
+├── .README.md.kate-swp
 ├── scripts
 │   ├── run_simulation.sh
 │   └── view_waves.sh
@@ -113,8 +121,6 @@ A tabela a seguir documenta as ferramentas utilizadas no ciclo de desenvolviment
     ├── tb_instr_mem.v
     ├── tb_mips_monociclo_top.v
     └── tb_reg_file.v
-
-16 directories, 53 files
 
 
 ```
