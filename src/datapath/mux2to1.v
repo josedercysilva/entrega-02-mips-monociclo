@@ -1,10 +1,11 @@
 // ============================================================================
 // Universidade Federal do Amazonas - UFAM
-// Instituto de Computacao - IComp
+// Faculdade de Engenharia Elétrica e da Computação - FEEC
 // Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
 // Manaus, Amazonas, Brasil
+// Desenvolvido com auxilio de: Gemini 3.8 Flash — High
 // ----------------------------------------------------------------------------
-// Modulo: mux2to1 (Multiplexador 2 para 1 Parametrizado)
+// Modulo: mux2to1 — Multiplexador 2 para 1 Parametrizado
 // Descricao: Multiplexador de duas entradas parametrizado na largura dos dados.
 //            Utilizado para selecionar caminhos alternativos de dados.
 // ============================================================================

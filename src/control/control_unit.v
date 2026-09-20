@@ -1,10 +1,11 @@
 // ============================================================================
 // Universidade Federal do Amazonas - UFAM
-// Instituto de Computacao - IComp
+// Faculdade de Engenharia Elétrica e da Computação - FEEC
 // Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
 // Manaus, Amazonas, Brasil
+// Desenvolvido com auxilio de: Gemini 3.8 Flash — High
 // ----------------------------------------------------------------------------
-// Modulo: control_unit (Unidade de Controle Integrada)
+// Modulo: control_unit — Unidade de Controle Integrada
 // Descricao: Integra o modulo main_control e o modulo alu_control, decodificando
 //            tanto o opcode quanto o funct para orquestrar todos os sinais
 //            de controle do processador MIPS Monociclo.
@@ -15,7 +16,7 @@
 module control_unit (
     input  wire [5:0] opcode,     // Campo opcode da instrucao
     input  wire [5:0] funct,      // Campo de funcao tipo-R
-    output wire [1:0] reg_dst,    // Seleciona registrador destino (rt, rd ou $31)
+    output wire [1:0] reg_dst,    // Seleciona registrador destino — rt, rd ou $31
     output wire       jump,       // Sinal de desvio incondicional
     output wire       jal,        // Sinal de desvio com link
     output wire       branch,     // Sinal de desvio condicional beq

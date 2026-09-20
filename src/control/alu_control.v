@@ -1,23 +1,24 @@
 // ============================================================================
 // Universidade Federal do Amazonas - UFAM
-// Instituto de Computacao - IComp
+// Faculdade de Engenharia Elétrica e da Computação - FEEC
 // Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
 // Manaus, Amazonas, Brasil
+// Desenvolvido com auxilio de: Gemini 3.8 Flash — High
 // ----------------------------------------------------------------------------
-// Modulo: alu_control (Controle da ALU)
+// Modulo: alu_control — Controle da ALU
 // Descricao: Decodifica o sinal alu_op vindo do controle principal e o campo
-//            funct da instrucao (bits [5:0]) para instrucoes tipo-R.
-//            Gera o codigo de controle da ALU (alu_ctrl de 4 bits) e o sinal
-//            de deteccao de desvio por registrador (jr).
+//            funct da instrucao — bits [5:0] — para instrucoes tipo-R.
+//            Gera o codigo de controle da ALU, alu_ctrl de 4 bits, e o sinal
+//            de deteccao de desvio por registrador — jr.
 // ============================================================================
 
 `timescale 1ns / 1ps
 
 module alu_control (
     input  wire [1:0] alu_op,   // Codigo de operacao base do controle principal
-    input  wire [5:0] funct,    // Campo de funcao da instrucao tipo-R (bits [5:0])
+    input  wire [5:0] funct,    // Campo de funcao da instrucao tipo-R — bits 5 a 0
     output wire [3:0] alu_ctrl, // Codigo de operacao de 4 bits para a ALU
-    output wire       jr        // 1: Instrucao JR detectada (funct = 6'b001000)
+    output wire       jr        // 1: Instrucao JR detectada — funct = 6'b001000
 );
 
     // TODO: Implementar a tabela de verdade combinacional do controle da ALU
