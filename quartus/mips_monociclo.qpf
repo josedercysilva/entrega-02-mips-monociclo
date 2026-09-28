@@ -1,0 +1,17 @@
+# ============================================================================
+# Universidade Federal do Amazonas - UFAM
+# Faculdade de Engenharia Eletrica e da Computacao - FEEC
+# Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
+# Manaus, Amazonas, Brasil
+# Autor: Jose Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
+# Desenvolvido com auxilio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
+# ----------------------------------------------------------------------------
+# Projeto: MIPS Monociclo 32 bits — Intel Quartus Prime Project File (.qpf)
+# ============================================================================
+
+QUARTUS_VERSION = "19.1"
+DATE = "22:15:00  September 27, 2026"
+
+# Revisions
+
+PROJECT_REVISION = "mips_monociclo"
