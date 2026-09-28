@@ -63,6 +63,7 @@ Para conformidade estrita com o roteiro da disciplina:
   - **Critério de Aceitação de PR:** Um módulo só está concluído e pronto para merge se vier acompanhado de seu respectivo `testbench` unitário rodando sem erros no Icarus Verilog/GTKWave.
 
 ## 6. Divisão de Responsabilidades
-- **José Dercy Vieira da Silva Filho (Integração, DevOps e Documentação):** Automação (`scripts/`), projeto Quartus, módulo ULA (`alu.v`), integração Top-Level (`mips_monociclo_top.v`), simulação geral com geração das formas de onda finais.
+- **José Dercy Vieira da Silva Filho (Integração, DevOps e Documentação):** Automação (`scripts/`), projeto Quartus, módulo ULA (`alu.v`), integração Top-Level (`mips_monociclo_top.v`), simulação geral com geração das formas de onda finais, redação do Relatório Técnico em LaTeX e montagem dos slides para o vídeo de defesa.
+
 - **Isabela Furtado (Datapath & Memória):** Módulos de suporte (`pc.v`, `reg_file.v`, `sign_extend.v`, `mux2to1.v`) e memórias (`instr_mem.v`, `data_mem.v`), além de seus respectivos testbenches unitários.
 - **Vinicius Menezes (Controle):** Módulos da Unidade de Controle (`main_control.v`, `alu_control.v`) e seus testbenches unitários.
