@@ -20,6 +20,7 @@ module control_unit (
     output wire       jump,       // Sinal de desvio incondicional
     output wire       jal,        // Sinal de desvio com link
     output wire       branch,     // Sinal de desvio condicional beq
+    output wire       branch_bne,
     output wire       mem_read,   // Leitura da memoria de dados
     output wire [1:0] mem_to_reg, // Seleciona origem do dado para escrita no registrador
     output wire [3:0] alu_ctrl,   // Controle de 4 bits para a ALU
@@ -29,6 +30,32 @@ module control_unit (
     output wire       jr          // Deteccao de desvio por registrador jr
 );
 
-    // TODO: Instanciar e interconectar main_control e alu_control
+    wire [1:0] alu_op_wire;
+    wire       reg_write_wire;
+
+    // Instanciação do Controle Principal
+    main_control main_ctrl_inst (
+        .opcode(opcode),
+        .reg_dst(reg_dst),
+        .jump(jump),
+        .jal(jal),
+        .branch(branch),
+        .branch_bne(branch_bne),
+        .mem_read(mem_read),
+        .mem_to_reg(mem_to_reg),
+        .alu_op(alu_op_wire),
+        .mem_write(mem_write),
+        .alu_src(alu_src),
+        .reg_write(reg_write_wire)
+    );
+
+    alu_control alu_ctrl_inst (
+        .alu_op(alu_op_wire),
+        .funct(funct),
+        .alu_ctrl(alu_ctrl),
+        .jr(jr)
+    );
+
+    assign reg_write = reg_write_wire & ~jr;
 
 endmodule

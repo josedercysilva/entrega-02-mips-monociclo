@@ -15,12 +15,53 @@
 `timescale 1ns / 1ps
 
 module alu_control (
-    input  wire [1:0] alu_op,   // Codigo de operacao base do controle principal
-    input  wire [5:0] funct,    // Campo de funcao da instrucao tipo-R — bits 5 a 0
-    output wire [3:0] alu_ctrl, // Codigo de operacao de 4 bits para a ALU
-    output wire       jr        // 1: Instrucao JR detectada — funct = 6'b001000
+    input  wire [1:0] alu_op,
+    input  wire [5:0] funct,
+    output reg  [3:0] alu_ctrl, 
+    output reg        jr        
 );
 
-    // TODO: Implementar a tabela de verdade combinacional do controle da ALU
+    always @(*) begin
+        
+        alu_ctrl = 4'b0000;
+        jr       = 1'b0;
 
+        case (alu_op)
+            2'b00: begin
+                // Usado por lw, sw, addi
+                // A ALU sempre soma os endereços
+                alu_ctrl = 4'b0010; 
+            end
+
+            2'b01: begin
+                // Usado por beq, bne
+                // A ALU sempre subtrai para ativar a flag "zero"
+                alu_ctrl = 4'b0110; 
+            end
+
+            2'b10: begin
+                // Usado pelas Instruções Tipo-R. s
+                case (funct)
+                    6'b100000: alu_ctrl = 4'b0010; // add (Soma)
+                    6'b100010: alu_ctrl = 4'b0110; // sub (Subtração)
+                    6'b100100: alu_ctrl = 4'b0000; // and (E lógico)
+                    6'b100101: alu_ctrl = 4'b0001; // or  (Ou lógico)
+                    6'b101010: alu_ctrl = 4'b0111; // slt (Set on Less Than)
+                    6'b100111: alu_ctrl = 4'b1100; // nor (NOR lógico)
+                    
+                    6'b001000: begin 
+                        // jr (Jump Register) - Instrução especial Tipo-R
+                        // O controle principal não sabe que é um JR, ele só 
+                        // sabe que é Tipo-R e manda pra cá.
+                        // Aqui detectamos o funct e disparamos a flag "jr".
+                        jr = 1'b1;
+                    end
+                    
+                    default: alu_ctrl = 4'b0000;
+                endcase
+            end
+
+            default: alu_ctrl = 4'b0000;
+        endcase
+    end
 endmodule
