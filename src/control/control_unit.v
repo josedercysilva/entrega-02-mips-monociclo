@@ -13,34 +13,38 @@
 
 `timescale 1ns / 1ps
 
-module control_unit (
-    input  wire [5:0] opcode,     // Campo opcode da instrucao
-    input  wire [5:0] funct,      // Campo de funcao tipo-R
-    output wire [1:0] reg_dst,    // Seleciona registrador destino — rt, rd ou $31
-    output wire       jump,       // Sinal de desvio incondicional
-    output wire       jal,        // Sinal de desvio com link
-    output wire       branch,     // Sinal de desvio condicional beq
-    output wire       branch_bne, // Leitura da instrução bne
-    output wire       mem_read,   // Leitura da memoria de dados
-    output wire [1:0] mem_to_reg, // Seleciona origem do dado para escrita no registrador
-    output wire [3:0] alu_ctrl,   // Controle de 4 bits para a ALU
-    output wire       mem_write,  // Escrita na memoria de dados
-    output wire       alu_src,    // Seleciona segundo operando da ALU
-    output wire       reg_write,  // Habilita gravacao no banco de registradores
-    output wire       jr          // Deteccao de desvio por registrador jr
+module control_unit #(
+    parameter OPCODE_WIDTH   = 6, // Largura do campo opcode
+    parameter FUNCT_WIDTH    = 6, // Largura do campo funct
+    parameter ALU_CTRL_WIDTH = 4  // Largura do controle da ALU
+) (
+    input  wire [OPCODE_WIDTH-1:0]   opcode,     // Campo opcode da instrucao
+    input  wire [FUNCT_WIDTH-1:0]    funct,      // Campo de funcao tipo-R
+    output wire [1:0]                reg_dst,    // Seleciona registrador destino — rt, rd ou $31
+    output wire                      jump,       // Sinal de desvio incondicional
+    output wire                      jal,        // Sinal de desvio com link
+    output wire                      branch,     // Sinal de desvio condicional beq
+    output wire                      mem_read,   // Leitura da memoria de dados
+    output wire [1:0]                mem_to_reg, // Seleciona origem do dado para escrita no registrador
+    output wire [ALU_CTRL_WIDTH-1:0] alu_ctrl,   // Controle de 4 bits para a ALU
+    output wire                      mem_write,  // Escrita na memoria de dados
+    output wire                      alu_src,    // Seleciona segundo operando da ALU
+    output wire                      reg_write,  // Habilita gravacao no banco de registradores
+    output wire                      jr          // Deteccao de desvio por registrador jr
 );
 
     wire [1:0] alu_op_wire;
     wire       reg_write_wire;
 
-    // Instanciação do Controle Principal
-    main_control main_ctrl_inst (
+    main_control #(
+        .OPCODE_WIDTH(OPCODE_WIDTH),
+        .ALU_OP_WIDTH(2)
+    ) main_ctrl_inst (
         .opcode(opcode),
         .reg_dst(reg_dst),
         .jump(jump),
         .jal(jal),
         .branch(branch),
-        .branch_bne(branch_bne),
         .mem_read(mem_read),
         .mem_to_reg(mem_to_reg),
         .alu_op(alu_op_wire),
@@ -49,13 +53,18 @@ module control_unit (
         .reg_write(reg_write_wire)
     );
 
-    alu_control alu_ctrl_inst (
+    alu_control #(
+        .ALU_OP_WIDTH(2),
+        .FUNCT_WIDTH(FUNCT_WIDTH),
+        .ALU_CTRL_WIDTH(ALU_CTRL_WIDTH)
+    ) alu_ctrl_inst (
         .alu_op(alu_op_wire),
         .funct(funct),
         .alu_ctrl(alu_ctrl),
         .jr(jr)
     );
 
+    // Desabilita escrita no banco de registradores quando a instrucao Tipo-R for JR
     assign reg_write = reg_write_wire & ~jr;
 
 endmodule

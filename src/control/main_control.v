@@ -4,28 +4,38 @@
 
 `timescale 1ns / 1ps
 
-module main_control (
-    input  wire [5:0] opcode,
-    output reg  [1:0] reg_dst,
-    output reg        jump,
-    output reg        jal,
-    output reg        branch,
-    output reg        branch_bne,
-    output reg        mem_read,
-    output reg  [1:0] mem_to_reg,
-    output reg  [1:0] alu_op,
-    output reg        mem_write,
-    output reg        alu_src,
-    output reg        reg_write
+module main_control #(
+    parameter OPCODE_WIDTH = 6, // Largura do campo opcode
+    parameter ALU_OP_WIDTH = 2  // Largura do sinal alu_op
+) (
+    input  wire [OPCODE_WIDTH-1:0] opcode,     // Codigo de operacao — bits 31 a 26 da instrucao
+    output reg  [1:0]              reg_dst,    // 2'b00: rt, 2'b01: rd, 2'b10: $31 — $ra para jal
+    output reg                     jump,       // 1: desvio incondicional — j ou jal
+    output reg                     jal,        // 1: desvio com link — salva PC+4 em $31
+    output reg                     branch,     // 1: desvio condicional por igualdade — beq
+    output reg                     mem_read,   // 1: habilita leitura da memoria de dados — lw
+    output reg  [1:0]              mem_to_reg, // 2'b00: ALU, 2'b01: Memoria de Dados, 2'b10: PC+4 — jal
+    output reg  [ALU_OP_WIDTH-1:0] alu_op,     // 2'b00: soma — lw, sw, addi —, 2'b01: subtracao — beq —, 2'b10: tipo-R
+    output reg                     mem_write,  // 1: habilita escrita na memoria de dados — sw
+    output reg                     alu_src,    // 0: segundo operando e registrador rt, 1: imediato estendido
+    output reg                     reg_write   // 1: habilita escrita no banco de registradores
 );
 
+    // Codigos de operacao (Opcodes MIPS)
+    localparam [OPCODE_WIDTH-1:0] OP_RTYPE = 6'b000000,
+                                  OP_J     = 6'b000010,
+                                  OP_JAL   = 6'b000011,
+                                  OP_BEQ   = 6'b000100,
+                                  OP_ADDI  = 6'b001000,
+                                  OP_LW    = 6'b100011,
+                                  OP_SW    = 6'b101011;
+
     always @(opcode) begin
-        // Valores padrao
+        // Valores padrao para evitar inferencia de latches
         reg_dst    = 2'b00;
         jump       = 1'b0;
         jal        = 1'b0;
         branch     = 1'b0;
-        branch_bne = 1'b0;
         mem_read   = 1'b0;
         mem_to_reg = 2'b00;
         alu_op     = 2'b00;
@@ -34,7 +44,7 @@ module main_control (
         reg_write  = 1'b0;
 
         case (opcode)
-            6'b000000: begin // Tipo-R
+            OP_RTYPE: begin
                 reg_dst    = 2'b01;
                 alu_src    = 1'b0;
                 mem_to_reg = 2'b00;
@@ -42,7 +52,7 @@ module main_control (
                 alu_op     = 2'b10;
             end
 
-            6'b100011: begin // lw
+            OP_LW: begin
                 reg_dst    = 2'b00;
                 alu_src    = 1'b1;
                 mem_to_reg = 2'b01;
@@ -51,13 +61,13 @@ module main_control (
                 alu_op     = 2'b00;
             end
 
-            6'b101011: begin // sw
+            OP_SW: begin
                 alu_src    = 1'b1;
                 mem_write  = 1'b1;
                 alu_op     = 2'b00;
             end
 
-            6'b001000: begin // addi
+            OP_ADDI: begin
                 reg_dst    = 2'b00;
                 alu_src    = 1'b1;
                 mem_to_reg = 2'b00;
@@ -65,27 +75,27 @@ module main_control (
                 alu_op     = 2'b00;
             end
 
-            6'b000100: begin // beq
+            OP_BEQ: begin
                 branch     = 1'b1;
                 alu_op     = 2'b01;
             end
 
-            6'b000101: begin // bne
-                branch_bne = 1'b1;
-                alu_op     = 2'b01;
-            end
-
-            6'b000010: begin // j
+            OP_J: begin
                 jump       = 1'b1;
             end
 
-            6'b000011: begin // jal
+            OP_JAL: begin
                 jump       = 1'b1;
                 jal        = 1'b1;
                 reg_dst    = 2'b10;
                 mem_to_reg = 2'b10;
                 reg_write  = 1'b1;
             end
+
+            default: begin
+                // Mantem sinais zerados para opcodes desconhecidos
+            end
         endcase
     end
+
 endmodule
