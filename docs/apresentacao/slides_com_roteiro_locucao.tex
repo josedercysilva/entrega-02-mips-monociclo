@@ -1,0 +1,511 @@
+% ==============================================================================
+% Universidade Federal do Amazonas - UFAM
+% Faculdade de Engenharia Elétrica e da Computação - FEEC
+% Engenharia da Computação - Arquitetura de Sistemas Digitais e Lab.
+%
+% Roteiro e Slides de Apresentação em Vídeo (Segunda Entrega - MIPS Monociclo)
+% ==============================================================================
+
+\documentclass[aspectratio=169, 10pt]{beamer}
+
+% Idioma e Tipografia
+\usepackage[brazil]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{booktabs}
+\usepackage{tcolorbox}
+
+% Desativa símbolos de navegação do Beamer (evita poluição visual e alertas)
+\setbeamertemplate{navigation symbols}{}
+
+% Tema Visual e Paleta Institucional UFAM
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+\definecolor{ufamblue}{RGB}{0, 43, 73}       % Azul Marinho Oficial UFAM
+\definecolor{ufamlight}{RGB}{0, 102, 178}    % Azul Real Claro
+\definecolor{ufamgold}{RGB}{196, 154, 69}    % Dourado Acadêmico
+\definecolor{cuered}{RGB}{175, 35, 35}       % Vermelho para Ações de Vídeo
+
+\setbeamercolor{structure}{fg=ufamblue}
+\setbeamercolor{palette primary}{bg=ufamblue, fg=white}
+\setbeamercolor{palette secondary}{bg=ufamlight, fg=white}
+\setbeamercolor{palette tertiary}{bg=ufamblue!85!black, fg=white}
+\setbeamercolor{titlelike}{parent=palette primary}
+\setbeamercolor{block title}{bg=ufamblue, fg=white}
+\setbeamercolor{block body}{bg=ufamblue!6!white, fg=black}
+\setbeamercolor{block title example}{bg=ufamlight!90!black, fg=white}
+\setbeamercolor{block body example}{bg=ufamlight!6!white, fg=black}
+
+% Estilo customizado para caixas de deixas de vídeo e roteiro
+\tcbset{
+    cuebox/.style={
+        colback=cuered!5!white,
+        colframe=cuered!90!black,
+        fonttitle=\bfseries\footnotesize,
+        title={AÇÃO DE VÍDEO / GRAVAÇÃO DE TELA},
+        boxrule=0.7pt,
+        arc=1.5mm,
+        left=2mm, right=2mm, top=1.2mm, bottom=1.2mm
+    },
+    speakerbox/.style={
+        colback=ufamgold!8!white,
+        colframe=ufamgold!90!black,
+        fonttitle=\bfseries\footnotesize,
+        title={ROTEIRO DE LOCUÇÃO},
+        boxrule=0.7pt,
+        arc=1.5mm,
+        left=2mm, right=2mm, top=1.2mm, bottom=1.2mm
+    }
+}
+
+% Metadados da Apresentação
+\title[MIPS Monociclo com Jumps]{Implementação e Validação em Hardware do Processador MIPS Monociclo com Instruções de Desvio}
+\subtitle{Segunda Entrega: Síntese em FPGA Intel MAX 10, Simulação RTL e Verificação Estrutural}
+
+\author[Dercy, Vinicius, Isabela]{%
+  \textbf{José Dercy Vieira da Silva Filho} \and \\
+  \textbf{Vinicius Menezes} \and \\
+  \textbf{Isabela Furtado}%
+}
+
+\institute[UFAM / FEEC]{%
+  Faculdade de Engenharia Elétrica e da Computação -- FEEC \\
+  Universidade Federal do Amazonas -- UFAM \\
+  Manaus, Brasil
+}
+
+\date[Outubro 2026]{Arquitetura de Sistemas Digitais e Laboratório -- 2026/2}
+
+% ==============================================================================
+% Início dos Slides
+% ==============================================================================
+\begin{document}
+
+% ------------------------------------------------------------------------------
+% Slide 1: Capa
+% ------------------------------------------------------------------------------
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Slide 2: Agenda e Estrutura do Vídeo
+% ------------------------------------------------------------------------------
+\begin{frame}{Agenda e Estrutura da Apresentação (Duração: $\approx$ 8 minutos)}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Divisão de Tempos e Responsabilidades}
+        \scriptsize
+        \begin{itemize}\setlength{\itemsep}{2pt}
+          \item \textbf{Bloco 1 (0:00 -- 2:30): José Dercy}\\
+            {\color{gray!80!black}ULA 32 bits, GTKWave (\texttt{make waves-alu}) e Quartus RTL}
+          \item \textbf{Bloco 2 (2:30 -- 5:00): Vinicius Menezes}\\
+            {\color{gray!80!black}Banco de Registradores ($32 \times 32$), Controle e Saltos}
+          \item \textbf{Bloco 3 (5:00 -- 7:30): Isabela Furtado}\\
+            {\color{gray!80!black}Memórias ROM/RAM, Top-Level e GTKWave (\texttt{make waves-top})}
+          \item \textbf{Encerramento (7:30 -- 8:00): Equipe}\\
+            {\color{gray!80!black}Síntese FPGA MAX 10, Rubricas e Próximos Passos}
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{tcolorbox}[cuebox]
+        \scriptsize
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item \textbf{0:00}: Câmera com os 3 alunos reunidos (Meet / OBS);
+          \item \textbf{0:20}: Dercy compartilha os slides na tela;
+          \item \textbf{1:20}: Dercy corta para GTKWave da ULA;
+          \item \textbf{1:55}: Dercy corta para Quartus Prime (RTL Viewer);
+          \item \textbf{2:30}: Passagem da palavra para Vinicius;
+          \item \textbf{5:00}: Passagem da palavra para Isabela;
+          \item \textbf{6:40}: Isabela corta para GTKWave do Top-Level;
+          \item \textbf{7:30}: Retorno aos slides finais com os 3 alunos.
+        \end{itemize}
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Slide 3: Bloco 1 - Arquitetura da ULA de 32 bits (José Dercy)
+% ------------------------------------------------------------------------------
+\begin{frame}{Bloco 1: Arquitetura da ULA de 32 bits (0:00 -- 1:15)}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \begin{block}{Otimização Estrutural e Complemento de Dois}
+        \footnotesize
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item \textbf{Somador/Subtrator Unificado (Harris \& Harris):}
+            Instanciação de apenas 1 somador de 32 bits com inversão condicional:
+            \par\centering $B_{\text{inv}} = B \oplus \text{alu\_control}[2], \quad S = A + B_{\text{inv}} + \text{alu\_control}[2]$\par
+          \item \textbf{Flag Zero em Tempo Mínimo:}
+            Implementada via redução unária de baixo atraso lógico:
+            \par\centering $\text{flag\_zero} = \sim\!(|\,\text{alu\_result})$\par
+          \item \textbf{Operação SLT com Sinal Correto:}
+            Utiliza o MSB do resultado somado ao tratamento de overflow.
+          \item \textbf{Conjunto Operacional:} \texttt{AND}, \texttt{OR}, \texttt{ADD}, \texttt{SUB}, \texttt{SLT}, \texttt{NOR}.
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.44\textwidth}
+      \begin{tcolorbox}[speakerbox]
+        \textbf{Locutor: José Dercy (Líder / DevOps)}\\
+        \vspace{1mm}
+        \scriptsize
+        ``Olá a todos. Sou o José Dercy e apresento a Segunda Entrega do processador MIPS Monociclo da disciplina de ASD da UFAM.
+        Na ULA de 32 bits, adotamos a arquitetura canônica de Harris \& Harris: unificamos adição e subtração em uma única cadeia de soma, invertendo $B$ por portas XOR e injetando o carry-in quando o bit 2 de controle está ativo.
+        A flag zero usa redução unária com árvore NOR de baixo atraso e a operação SLT foi desenhada com tratamento formal de números com sinal.''
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Slide 4: Bloco 1 - Verificação da ULA no GTKWave (José Dercy)
+% ------------------------------------------------------------------------------
+\begin{frame}{Bloco 1: Verificação da ULA no GTKWave (1:15 -- 1:50)}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Bateria Formal de Testes Unitários (\texttt{tb\_alu.v})}
+        \footnotesize
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item 11 casos de teste formais com auto-verificação:
+            \begin{itemize}
+              \item Operações lógicas bit a bit (\texttt{AND}, \texttt{OR}, \texttt{NOR});
+              \item Soma e subtração de positivos e negativos;
+              \item Detecção imediata de flag zero em resultados nulos;
+              \item Casos de borda para comparação assinada (\texttt{SLT}).
+            \end{itemize}
+          \item 100\% de aprovação sem advertências de simulação.
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{tcolorbox}[cuebox]
+        \textbf{Compartilhar Tela: Terminal \& GTKWave}
+        \vspace{1mm}
+        \scriptsize
+        \begin{enumerate}\setlength{\itemsep}{1pt}
+          \item No terminal, digitar: \texttt{make waves-alu};
+          \item O GTKWave abrirá exibindo o sinal \texttt{alu.vcd};
+          \item Apontar as transições de \texttt{alu\_control[2:0]};
+          \item \textbf{Foco na Narração:} Mostrar o momento exato em que a subtração $A - B$ resulta em zero e o sinal \texttt{flag\_zero} vai para nível alto (1) no mesmo instante.
+        \end{enumerate}
+      \end{tcolorbox}
+
+      \begin{tcolorbox}[speakerbox]
+        \scriptsize
+        ``Como vemos no GTKWave, a ULA responde prontamente a cada transição de controle, calculando os resultados e atualizando a flag zero instantaneamente.''
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Slide 5: Bloco 1 - Síntese no Quartus e RTL Viewer (José Dercy)
+% ------------------------------------------------------------------------------
+\begin{frame}{Bloco 1: Síntese no Intel Quartus Prime e RTL Viewer (1:50 -- 2:30)}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Configuração da Síntese (Rubrica 1)}
+        \footnotesize
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item \textbf{Dispositivo FPGA:} Intel MAX 10 (\texttt{10M50DAF484C7G});
+          \item \textbf{Placa Alvo:} Terasic DE10-Lite;
+          \item \textbf{Arquivos de Projeto:} \texttt{quartus/mips\_monociclo.qpf} e \texttt{.qsf};
+          \item \textbf{Comandos Make:}
+            \begin{itemize}
+              \item \texttt{make quartus}: Análise e Elaboração rápida;
+              \item \texttt{make quartus-build}: Síntese completa + Fit + Bitstream \texttt{.sof}.
+            \end{itemize}
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{tcolorbox}[cuebox]
+        \textbf{Compartilhar Tela: Intel Quartus Prime 19.1}
+        \vspace{1mm}
+        \scriptsize
+        \begin{enumerate}\setlength{\itemsep}{1pt}
+          \item Mostrar o projeto aberto no Quartus Prime;
+          \item Acessar menu: \textbf{Tools $\rightarrow$ Netlist Viewers $\rightarrow$ RTL Viewer};
+          \item Navegar até a entidade \texttt{alu};
+          \item \textbf{Foco na Narração:} Apontar o somador de 32 bits sintetizado e os multiplexadores de seleção da operação.
+        \end{enumerate}
+      \end{tcolorbox}
+
+      \begin{tcolorbox}[speakerbox]
+        \scriptsize
+        ``Aqui no RTL Viewer do Quartus, observamos a correta inferência do somador unificado e a árvore de multiplexação. Passo agora a palavra ao Vinicius.''
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Slide 6: Bloco 2 - Banco de Registradores de 32 bits (Vinicius Menezes)
+% ------------------------------------------------------------------------------
+\begin{frame}{Bloco 2: Banco de Registradores de 32 bits (2:30 -- 3:45)}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \begin{block}{Arquitetura do Register File (\texttt{reg\_file.v})}
+        \footnotesize
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item \textbf{Dimensões:} 32 registradores de 32 bits (\$0 a \$31).
+          \item \textbf{Topologia de Portas:}
+            \begin{itemize}
+              \item 2 portas de leitura combinacional/assíncrona (\texttt{rdata1}, \texttt{rdata2});
+              \item 1 porta de escrita síncrona (\texttt{wdata}, \texttt{reg\_write}).
+            \end{itemize}
+          \item \textbf{Temporização em Monociclo:}
+            A leitura combinacional permite fornecer operandos para a ULA no mesmo ciclo; a escrita ocorre na borda de subida (\texttt{posedge clk}).
+          \item \textbf{Garantia Estrutural do Registrador Zero (\$0):}
+            $$\text{rdata} = (\text{raddr} == 5\text{'b}0) \ ? \ 32\text{'b}0 : \text{registers}[\text{raddr}]$$
+            Imune a qualquer sobrescrita indevida por software.
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.44\textwidth}
+      \begin{tcolorbox}[speakerbox]
+        \textbf{Locutor: Vinicius Menezes}\\
+        \vspace{1mm}
+        \scriptsize
+        ``Obrigado, Dercy. Sou o Vinicius e trabalhei no Banco de Registradores e na Unidade de Controle.
+        O Banco de Registradores conta com 32 posições de 32 bits.
+        Para operar em monociclo, a leitura é assíncrona, viabilizando o fluxo contínuo de dados até a ULA em um único ciclo, enquanto a escrita é síncrona na subida do clock.
+        O registrador \$0 é travado em zero diretamente por hardware, garantindo total conformidade com o padrão MIPS.''
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Slide 7: Bloco 2 - Unidade de Controle e Decodificação de Saltos (Vinicius Menezes)
+% ------------------------------------------------------------------------------
+\begin{frame}{Bloco 2: Unidade de Controle e Decodificação de Saltos (3:45 -- 5:00)}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \begin{block}{Decodificação Hierárquica e Suporte aos Jumps}
+        \footnotesize
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item \textbf{Controle Principal:} Decodifica \texttt{Opcode[5:0]} gerando os sinais de controle do datapath (\texttt{RegDst}, \texttt{ALUSrc}, \texttt{MemWrite}, \texttt{Branch}, etc.).
+          \item \textbf{Tratamento Rigoroso das Instruções de Desvio:}
+            \begin{itemize}
+              \item \texttt{beq} (Tipo-I): Ativa \texttt{Branch}; decisão tomada por \texttt{Branch \& Zero};
+              \item \texttt{j} (Tipo-J): Ativa \texttt{Jump}; salto para endereço pseudodireto de 26 bits;
+              \item \texttt{jal} (Tipo-J): Ativa \texttt{Jump} e sinal \texttt{Jal}, gravando $PC+4$ no registrador \$31 (\$ra);
+              \item \texttt{jr} (Tipo-R): Decodifica \texttt{Funct = 0x08}, ativando \texttt{JR\_Control} para rotear o registrador lido (\$rs) ao próximo PC.
+            \end{itemize}
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.44\textwidth}
+      \begin{tcolorbox}[speakerbox]
+        \textbf{Locutor: Vinicius Menezes}\\
+        \vspace{1mm}
+        \scriptsize
+        ``A Unidade de Controle foi dividida entre o decodificador principal e o controle da ULA.
+        O ponto central desta Segunda Entrega foi o suporte aos desvios:
+        O desvio condicional \texttt{beq} combina o sinal \texttt{Branch} com a flag zero da ULA.
+        O salto \texttt{j} realiza o desvio incondicional.
+        O \texttt{jal} faz a chamada de função salvando $PC+4$ em \$31.
+        E a instrução \texttt{jr} fecha o ciclo de retorno de sub-rotina ao direcionar o valor de \$ra de volta para o Program Counter.
+        Passo a palavra para a Isabela.''
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Slide 8: Bloco 3 - Subsistema de Memória ROM e RAM (Isabela Furtado)
+% ------------------------------------------------------------------------------
+\begin{frame}{Bloco 3: Subsistema de Memória ROM e RAM (5:00 -- 6:15)}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \begin{block}{Arquitetura Harvard no Nível de Módulos}
+        \footnotesize
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item \textbf{Memória de Instruções (\texttt{instr\_mem.v} -- ROM):}
+            \begin{itemize}
+              \item 256 palavras de 32 bits (1 KB);
+              \item Leitura assíncrona alinhada por palavra (\texttt{pc[31:2]});
+              \item Carga do programa via diretiva \texttt{\$readmemh}.
+            \end{itemize}
+          \item \textbf{Memória de Dados (\texttt{data\_mem.v} -- RAM):}
+            \begin{itemize}
+              \item 256 palavras de 32 bits para dados voláteis;
+              \item Leitura combinacional rápida para a instrução \texttt{lw};
+              \item Escrita síncrona habilitada pelo sinal \texttt{mem\_write} (\texttt{sw}).
+            \end{itemize}
+          \item \textbf{Eliminação de Conflitos Estruturais:}
+            A separação de barramentos viabiliza busca de instrução e acesso a dados no mesmo ciclo de clock.
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.44\textwidth}
+      \begin{tcolorbox}[speakerbox]
+        \textbf{Locutor: Isabela Furtado}\\
+        \vspace{1mm}
+        \scriptsize
+        ``Olá, pessoal, sou a Isabela. Fiquei com o subsistema de memórias e a integração do Top-Level.
+        Adotamos a arquitetura Harvard clássica com memórias separadas de instrução e de dados para eliminar qualquer conflito estrutural no ciclo único.
+        A memória de instruções é uma ROM assíncrona alinhada por palavras, inicializada com o programa de teste.
+        A memória de dados é uma RAM com leitura rápida para a instrução \texttt{lw} e escrita síncrona para \texttt{sw}.''
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Slide 9: Bloco 3 - Fiação Estrutural do Top-Level (Isabela Furtado)
+% ------------------------------------------------------------------------------
+\begin{frame}{Bloco 3: Fiação Estrutural do Top-Level e Próximo PC (6:15 -- 6:40)}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \begin{block}{Cascata Ordenada de Multiplexadores para o Próximo PC}
+        \footnotesize
+        A determinação do próximo endereço do PC obedece à hierarquia estrita:
+        \begin{enumerate}\setlength{\itemsep}{2pt}
+          \item \textbf{Multiplexador de Branch:}
+            $$PC_{\text{seq}} = (\text{branch} \land \text{zero}) \ ? \ PC_{\text{branch}} : PC+4$$
+          \item \textbf{Multiplexador de Jump (\texttt{j} / \texttt{jal}):}
+            $$PC_{\text{j\_sel}} = \text{jump} \ ? \ \{PC+4[31:28], \text{instr}[25:0], 2'b00\} : PC_{\text{seq}}$$
+          \item \textbf{Multiplexador de JR (\texttt{jr}):}
+            $$PC_{\text{next}} = \text{jr\_ctrl} \ ? \ \text{rdata1} : PC_{\text{j\_sel}}$$
+        \end{enumerate}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.44\textwidth}
+      \begin{tcolorbox}[speakerbox]
+        \textbf{Locutor: Isabela Furtado}\\
+        \vspace{1mm}
+        \scriptsize
+        ``Na integração do caminho de dados e top-level, o ponto crítico foi a cascata de seleção do próximo PC.
+        Primeiro avaliamos se há desvio condicional (\texttt{beq}). Em seguida, multiplexamos para saltos incondicionais diretos (\texttt{j} ou \texttt{jal}).
+        E, por fim, o multiplexador prioritário de \texttt{jr} comuta para o valor lido do registrador (\$rs), garantindo o correto retorno de funções.''
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Slide 10: Bloco 3 - Demonstração Geral no GTKWave (Isabela Furtado)
+% ------------------------------------------------------------------------------
+\begin{frame}{Bloco 3: Demonstração do Top-Level no GTKWave (6:40 -- 7:30)}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{Cenário de Teste Executado no Top-Level}
+        \footnotesize
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item 1. Carga de imediatos nos registradores com \texttt{addi};
+          \item 2. Operações lógicas e aritméticas (\texttt{add}, \texttt{sub});
+          \item 3. Desvio condicional \texttt{beq} tomado e não-tomado;
+          \item 4. Chamada de procedimento com \texttt{jal}, salvando $PC+4$ em \$31;
+          \item 5. Retorno de sub-rotina bem-sucedido via \texttt{jr \$ra}.
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \begin{tcolorbox}[cuebox]
+        \textbf{Compartilhar Tela: GTKWave Top-Level}
+        \vspace{1mm}
+        \scriptsize
+        \begin{enumerate}\setlength{\itemsep}{1pt}
+          \item No terminal, executar: \texttt{make waves-top};
+          \item Apontar no GTKWave os sinais: \texttt{pc[31:0]}, \texttt{instr[31:0]}, \texttt{jump}, \texttt{jal}, \texttt{jr\_ctrl};
+          \item \textbf{Foco na Narração:} Mostrar o momento exato em que a instrução \texttt{jal} é executada, gravando o endereço no registrador \$31, e como a instrução posterior \texttt{jr \$ra} restabelece o fluxo sem falhas de temporização.
+        \end{enumerate}
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Slide 11: Síntese Física no Intel MAX 10 e Qualidade de Código (José Dercy e Equipe)
+% ------------------------------------------------------------------------------
+\begin{frame}{Síntese Física no FPGA Intel MAX 10 e Métricas de Projeto (7:30 -- 7:50)}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{block}{Resultados de Síntese no Intel Quartus Prime 19.1}
+        \footnotesize
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item \textbf{FPGA Alvo:} Intel MAX 10 (\texttt{10M50DAF484C7G}) -- DE10-Lite;
+          \item \textbf{Utilização de Recursos:} 0 erros de compilação (\texttt{make quartus-build});
+          \item \textbf{Caminho Crítico da Instrução mais Longa (\texttt{lw}):}
+            $$T_{\text{clk}} \ge T_{\text{ROM}} + T_{\text{RegFile}} + T_{\text{ALU}} + T_{\text{RAM}} + T_{\text{Mux}} + T_{\text{Setup}}$$
+          \item \textbf{Código 100\% Parametrizado:} Declaração rigorosa de parâmetros em todos os módulos HDL.
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.46\textwidth}
+      \begin{exampleblock}{Governança e DevOps}
+        \footnotesize
+        \begin{itemize}\setlength{\itemsep}{1pt}
+          \item \textbf{Reprodutibilidade Total:} Makefile com 14 alvos operacionais;
+          \item \textbf{Bateria de Testbenches:} Verificação formal cobrindo todos os módulos unitários;
+          \item \textbf{Documentação Oficial:} Relatório IEEE compilado via Tectonic.
+        \end{itemize}
+      \end{exampleblock}
+
+      \begin{tcolorbox}[speakerbox]
+        \textbf{Locutor: José Dercy}\\
+        \vspace{1mm}
+        \scriptsize
+        ``A síntese física no Quartus Prime comprovou a viabilidade física do processador na DE10-Lite, com restrições temporais atendidas e governança em DevOps.''
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ------------------------------------------------------------------------------
+% Slide 12: Conclusão e Próximos Passos (Equipe)
+% ------------------------------------------------------------------------------
+\begin{frame}{Conclusão e Próximos Passos: Rumo ao Pipeline (7:50 -- 8:00)}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \begin{exampleblock}{Atendimento Integral das 5 Rubricas}
+        \footnotesize
+        \begin{enumerate}\setlength{\itemsep}{1pt}
+          \item[\checkmark] \textbf{Rubrica 1 -- Ambiente:} Fluxo Quartus + Icarus + GTKWave funcional;
+          \item[\checkmark] \textbf{Rubrica 2 -- Datapath com Jumps:} Saltos \texttt{j}, \texttt{jal}, \texttt{jr}, \texttt{beq} operando;
+          \item[\checkmark] \textbf{Rubrica 3 -- Testbenches:} Bateria completa com 100\% de aprovação;
+          \item[\checkmark] \textbf{Rubrica 4 -- Parametrização:} Módulos Verilog parametrizados;
+          \item[\checkmark] \textbf{Rubrica 5 -- Vídeo e Artigo:} Roteiro executado e artigo IEEE compilado.
+        \end{enumerate}
+      \end{exampleblock}
+
+      \begin{block}{Transição para a Terceira Entrega}
+        \footnotesize
+        Base estrutural pronta para segmentação em 5 estágios com Hazards e Forwarding.
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.44\textwidth}
+      \begin{tcolorbox}[speakerbox]
+        \textbf{Locutores: Dercy, Vinicius e Isabela}\\
+        \vspace{1mm}
+        \scriptsize
+        ``Concluímos assim a Segunda Entrega do processador MIPS Monociclo.
+        Obrigado pela atenção do professor e dos colegas!
+        O código e o relatório técnico completo estão disponíveis no nosso repositório no GitHub. Muito obrigado!''
+      \end{tcolorbox}
+
+      \begin{tcolorbox}[cuebox]
+        \textbf{Câmera Final:}
+        Os três alunos em chamada aberta agradecendo e despedindo-se.
+      \end{tcolorbox}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\end{document}
