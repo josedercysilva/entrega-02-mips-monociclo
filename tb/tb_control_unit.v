@@ -130,7 +130,7 @@ module tb_control_unit;
         // 8. JAL (Jump and Link) | opcode = 3 (0x03)
         // Note: rWr = 1, regDst = 2'b10 (escreve no $31), mToReg = 2'b10 (salva PC+4)
         opcode = 6'b000011; funct = 6'b000000;
-        check_signals(2'b10,   1'b1,  1'b1,  1'b0,  1'b0,  1'b0,  2'b10,  4'b0000, 1'b0,  1'b0,  1'b1,  1'b0, "JAL (Jump and Link)");
+        check_signals(2'b10,   1'b1,  1'b1,  1'b0,  1'b0,  1'b0,  2'b10,  4'b0010, 1'b0,  1'b0,  1'b1,  1'b0, "JAL (Jump and Link)");
 
         $display("============================================================");
         if (errors == 0) begin
