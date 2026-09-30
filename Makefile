@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash
 QUARTUS_BIN_DIR ?= /home/jdercy/01-dev/programas/opt_intel/quartus/bin
 export PATH := $(QUARTUS_BIN_DIR):$(PATH)
 
-.PHONY: all help test alu reg_file control instr_mem data_mem top waves waves-alu waves-top relatorio quartus quartus-build quartus-pgm clean
+.PHONY: all help test alu reg_file control instr_mem data_mem top waves waves-alu waves-top relatorio apresentacao quartus quartus-build quartus-pgm clean
 
 all: top
 
@@ -23,6 +23,7 @@ help:
 	@echo "  make waves-alu     - Abre as formas de onda da ALU no GTKWave"
 	@echo "  make waves-top     - Abre as formas de onda do Top-Level no GTKWave"
 	@echo "  make relatorio     - Compila o relatório IEEE em LaTeX via Tectonic"
+	@echo "  make apresentacao  - Compila os slides da apresentação em LaTeX Beamer via Tectonic"
 	@echo "  make clean         - Remove arquivos compilados e temporários (.vvp, .vcd)"
 
 alu:
@@ -76,6 +77,9 @@ waves-top:
 
 relatorio:
 	@cd docs/relatorio && ./compilar.sh
+
+apresentacao:
+	@cd docs/apresentacao && ./compilar.sh
 
 clean:
 	@./scripts/clean.sh
