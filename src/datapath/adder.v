@@ -3,9 +3,11 @@
 // Faculdade de Engenharia Elétrica e da Computação - FEEC
 // Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
 // Manaus, Amazonas, Brasil
-// Desenvolvido com auxilio de: Gemini 3.8 Flash — High
+// Desenvolvido com auxilio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
 // ----------------------------------------------------------------------------
 // Modulo: adder — Somador Aritmetico Parametrizado
+// Atribuicao Original do Projeto: Isabela Furtado (Datapath)
+// Implementacao e Integracao: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
 // Descricao: Somador combinacional utilizado no caminho de dados para o calculo
 //            do incremento de PC, PC + 4, e do endereco de desvio condicional
 //            — Branch Target Address.

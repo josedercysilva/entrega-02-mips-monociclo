@@ -3,9 +3,11 @@
 // Faculdade de Engenharia Elétrica e da Computação - FEEC
 // Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
 // Manaus, Amazonas, Brasil
-// Desenvolvido com auxilio de: Gemini 3.8 Flash — High
+// Desenvolvido com auxilio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
 // ----------------------------------------------------------------------------
 // Modulo: mux4to1 — Multiplexador 4 para 1 Parametrizado
+// Atribuicao Original do Projeto: Isabela Furtado (Datapath)
+// Implementacao e Integracao: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
 // Descricao: Multiplexador de quatro entradas parametrizado. Utilizado para
 //            selecionar a fonte do proximo PC — PC+4, Branch, Jump ou JR.
 // ============================================================================

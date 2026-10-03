@@ -3,9 +3,11 @@
 // Faculdade de Engenharia Elétrica e da Computação - FEEC
 // Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
 // Manaus, Amazonas, Brasil
-// Desenvolvido com auxilio de: Gemini 3.8 Flash — High
+// Desenvolvido com auxilio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
 // ----------------------------------------------------------------------------
 // Modulo: mux3to1 — Multiplexador 3 para 1 Parametrizado
+// Atribuicao Original do Projeto: Isabela Furtado (Datapath)
+// Implementacao e Integracao: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
 // Descricao: Multiplexador de tres entradas parametrizado. Utilizado nos sinais
 //            RegDst e MemtoReg para suportar instrucoes do tipo JAL, como $ra e PC+4.
 // ============================================================================
