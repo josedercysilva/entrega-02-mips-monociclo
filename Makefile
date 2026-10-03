@@ -3,13 +3,14 @@ SHELL := /usr/bin/env bash
 QUARTUS_BIN_DIR ?= /home/jdercy/01-dev/programas/opt_intel/quartus/bin
 export PATH := $(QUARTUS_BIN_DIR):$(PATH)
 
-.PHONY: all help test alu reg_file control instr_mem data_mem top waves waves-alu waves-top relatorio apresentacao quartus quartus-build quartus-pgm clean
+.PHONY: all help test alu datapath_aux reg_file control instr_mem data_mem top waves waves-alu waves-top relatorio apresentacao quartus quartus-build quartus-pgm clean
 
 all: top
 
 help:
 	@echo "Alvos disponíveis no Makefile:"
 	@echo "  make alu           - Executa o testbench da ALU"
+	@echo "  make datapath_aux  - Executa o testbench dos módulos auxiliares do datapath"
 	@echo "  make reg_file      - Executa o testbench do Register File"
 	@echo "  make control       - Executa o testbench da Unidade de Controle"
 	@echo "  make instr_mem     - Executa o testbench da Memória de Instruções"
@@ -28,6 +29,9 @@ help:
 
 alu:
 	@./scripts/run_simulation.sh alu
+
+datapath_aux:
+	@./scripts/run_simulation.sh datapath_aux
 
 reg_file:
 	@./scripts/run_simulation.sh reg_file

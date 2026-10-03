@@ -29,6 +29,17 @@ case "${TARGET}" in
         SRC_FILES=("src/datapath/alu.v")
         TB_FILE="tb/tb_alu.v"
         ;;
+    datapath_aux)
+        SRC_FILES=(
+            "src/datapath/pc.v"
+            "src/datapath/adder.v"
+            "src/datapath/sign_extend.v"
+            "src/datapath/mux2to1.v"
+            "src/datapath/mux3to1.v"
+            "src/datapath/mux4to1.v"
+        )
+        TB_FILE="tb/tb_datapath_aux.v"
+        ;;
     reg_file)
         SRC_FILES=("src/datapath/reg_file.v")
         TB_FILE="tb/tb_reg_file.v"

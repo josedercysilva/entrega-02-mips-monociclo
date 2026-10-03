@@ -1,26 +1,27 @@
 // ============================================================================
 // Universidade Federal do Amazonas - UFAM
 // Faculdade de Engenharia Elétrica e da Computação - FEEC
-// Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
+// Disciplina: Arquitetura de Sistemas Digitais e Laboratório
 // Manaus, Amazonas, Brasil
-// Desenvolvido com auxilio de: Gemini 3.8 Flash — High
+// Autor: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
+// Desenvolvido com auxílio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
 // ----------------------------------------------------------------------------
-// Modulo: sign_extend — Extensor de Sinal Parametrizado
-// Descricao: Converte um valor de campo imediato — padrao: 16 bits — para a
-//            largura do barramento interno — padrao: 32 bits —, preservando
-//            o bit de sinal para operacoes com sinal, como aritmetica, branches, lw e sw.
+// Módulo: sign_extend — Extensor de Sinal Parametrizado
+// Descrição: Converte um valor de campo imediato — padrão: 16 bits — para a
+//            largura do barramento interno — padrão: 32 bits —, preservando
+//            o bit de sinal para operações com sinal, como aritmética, branches, lw e sw.
 // ============================================================================
 
 `timescale 1ns / 1ps
 
 module sign_extend #(
-    parameter IN_WIDTH  = 16, // Largura do imediato de entrada
-    parameter OUT_WIDTH = 32  // Largura da palavra estendida de saida
+    parameter IN_WIDTH  = 16, 
+    parameter OUT_WIDTH = 32
 ) (
-    input  wire [IN_WIDTH-1:0]  in,  // Valor imediato de entrada — ex: 16 bits
-    output wire [OUT_WIDTH-1:0] out  // Valor estendido com replicacao do bit de sinal
+    input  wire [IN_WIDTH-1:0]  in,
+    output wire [OUT_WIDTH-1:0] out
 );
 
-    // TODO: Implementar extensao de sinal com replicacao de in[IN_WIDTH-1]
+    assign out = {{(OUT_WIDTH-IN_WIDTH){in[IN_WIDTH-1]}}, in};
 
 endmodule
