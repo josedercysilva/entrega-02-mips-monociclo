@@ -3,11 +3,10 @@
 // Faculdade de Engenharia Elétrica e da Computação - FEEC
 // Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
 // Manaus, Amazonas, Brasil
+// Autor: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
 // Desenvolvido com auxilio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
 // ----------------------------------------------------------------------------
 // Modulo: mux2to1 — Multiplexador 2 para 1 Parametrizado
-// Atribuicao Original do Projeto: Isabela Furtado (Datapath)
-// Implementacao e Integracao: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
 // Descricao: Multiplexador de duas entradas parametrizado na largura dos dados.
 //            Utilizado para selecionar caminhos alternativos de dados.
 // ============================================================================

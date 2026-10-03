@@ -3,11 +3,10 @@
 // Faculdade de Engenharia Elétrica e da Computação - FEEC
 // Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
 // Manaus, Amazonas, Brasil
+// Autor: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
 // Desenvolvido com auxilio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
 // ----------------------------------------------------------------------------
 // Modulo: sign_extend — Extensor de Sinal Parametrizado
-// Atribuicao Original do Projeto: Isabela Furtado (Datapath)
-// Implementacao e Integracao: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
 // Descricao: Converte um valor de campo imediato — padrao: 16 bits — para a
 //            largura do barramento interno — padrao: 32 bits —, preservando
 //            o bit de sinal para operacoes com sinal, como aritmetica, branches, lw e sw.

@@ -3,11 +3,10 @@
 // Faculdade de Engenharia Elétrica e da Computação - FEEC
 // Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
 // Manaus, Amazonas, Brasil
+// Autor: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
+// Desenvolvido com auxilio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
 // ----------------------------------------------------------------------------
 // Testbench: tb_datapath_aux — Testes dos Modulos Auxiliares do Datapath
-// Subprojeto: Validacao dos Modulos da Parte da Isabela Furtado (Datapath)
-// Implementacao e Integracao: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
-// Desenvolvido com auxilio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
 // ============================================================================
 
 `timescale 1ns / 1ps
