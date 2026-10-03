@@ -1,12 +1,12 @@
 // ============================================================================
 // Universidade Federal do Amazonas - UFAM
 // Faculdade de Engenharia Elétrica e da Computação - FEEC
-// Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
+// Disciplina: Arquitetura de Sistemas Digitais e Laboratório
 // Manaus, Amazonas, Brasil
 // Autor: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
-// Desenvolvido com auxilio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
+// Desenvolvido com auxílio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
 // ----------------------------------------------------------------------------
-// Testbench: tb_datapath_aux — Testes dos Modulos Auxiliares do Datapath
+// Testbench: tb_datapath_aux — Testes dos Módulos Auxiliares do Datapath
 // ============================================================================
 
 `timescale 1ns / 1ps
@@ -50,7 +50,7 @@ module tb_datapath_aux;
     integer errors = 0;
     integer tests = 0;
 
-    // Instanciacoes
+    // Instanciações
     pc #(.DATA_WIDTH(DATA_WIDTH)) uut_pc (
         .clk(clk),
         .reset(reset),
@@ -93,7 +93,7 @@ module tb_datapath_aux;
         .y(m4_y)
     );
 
-    // Gerador de clock (periodo = 10ns)
+    // Gerador de clock (período = 10ns)
     always #5 clk = ~clk;
 
     initial begin
@@ -107,17 +107,17 @@ module tb_datapath_aux;
         m4_d0 = 32'h1000_0000; m4_d1 = 32'h2000_0000; m4_d2 = 32'h3000_0000; m4_d3 = 32'h4000_0000; m4_sel = 0;
 
         $display("==========================================================");
-        $display("   Iniciando Testbench dos Modulos Auxiliares (Fase 1)    ");
+        $display("   Iniciando Testbench dos Módulos Auxiliares (Fase 1)    ");
         $display("==========================================================");
 
         // --- 1. Teste do PC ---
         #12;
         tests = tests + 1;
         if (pc_out !== 32'h00000000) begin
-            $display("[ERRO PC] Reset ativo nao zerou PC! Obtido: 0x%08h", pc_out);
+            $display("[ERRO PC] Reset ativo não zerou PC! Obtido: 0x%08h", pc_out);
             errors = errors + 1;
         end else begin
-            $display("[PASS PC] Reset assincrono ativo zerou PC: 0x%08h", pc_out);
+            $display("[PASS PC] Reset assíncrono ativo zerou PC: 0x%08h", pc_out);
         end
 
         reset = 0;
@@ -125,17 +125,17 @@ module tb_datapath_aux;
         #10;
         tests = tests + 1;
         if (pc_out !== 32'h00400004) begin
-            $display("[ERRO PC] Atualizacao de PC falhou! Esperado: 0x00400004, Obtido: 0x%08h", pc_out);
+            $display("[ERRO PC] Atualização de PC falhou! Esperado: 0x00400004, Obtido: 0x%08h", pc_out);
             errors = errors + 1;
         end else begin
-            $display("[PASS PC] Atualizacao no posedge clk com sucesso: 0x%08h", pc_out);
+            $display("[PASS PC] Atualização no posedge clk com sucesso: 0x%08h", pc_out);
         end
 
         pc_in = 32'h00400008;
         #10;
         tests = tests + 1;
         if (pc_out !== 32'h00400008) begin
-            $display("[ERRO PC] Atualizacao subsequente falhou! Obtido: 0x%08h", pc_out);
+            $display("[ERRO PC] Atualização subsequente falhou! Obtido: 0x%08h", pc_out);
             errors = errors + 1;
         end else begin
             $display("[PASS PC] Segundo ciclo de clock validado: 0x%08h", pc_out);
@@ -167,7 +167,7 @@ module tb_datapath_aux;
             $display("[ERRO SIGN_EXT] Valor positivo falhou! Obtido: 0x%08h", sign_ext_out);
             errors = errors + 1;
         end else begin
-            $display("[PASS SIGN_EXT] Extensao positiva 0x0007 -> 0x00000007 correta.");
+            $display("[PASS SIGN_EXT] Extensão positiva 0x0007 -> 0x00000007 correta.");
         end
 
         sign_ext_in = 16'hFFFF; #2;
@@ -176,7 +176,7 @@ module tb_datapath_aux;
             $display("[ERRO SIGN_EXT] Valor negativo -1 falhou! Obtido: 0x%08h", sign_ext_out);
             errors = errors + 1;
         end else begin
-            $display("[PASS SIGN_EXT] Extensao negativa 0xFFFF -> 0xFFFFFFFF correta.");
+            $display("[PASS SIGN_EXT] Extensão negativa 0xFFFF -> 0xFFFFFFFF correta.");
         end
 
         sign_ext_in = 16'h8000; #2;
@@ -185,7 +185,7 @@ module tb_datapath_aux;
             $display("[ERRO SIGN_EXT] Mais negativo falhou! Obtido: 0x%08h", sign_ext_out);
             errors = errors + 1;
         end else begin
-            $display("[PASS SIGN_EXT] Extensao 0x8000 -> 0xFFFF8000 correta.");
+            $display("[PASS SIGN_EXT] Extensão 0x8000 -> 0xFFFF8000 correta.");
         end
 
         // --- 4. Teste do Mux 2:1 ---
@@ -228,7 +228,7 @@ module tb_datapath_aux;
             $display("[ERRO MUX3] sel=10 falhou! Obtido: 0x%08h", m3_y);
             errors = errors + 1;
         end else begin
-            $display("[PASS MUX3] Selecoes 2'b00, 2'b01 e 2'b10 validadas.");
+            $display("[PASS MUX3] Seleções 2'b00, 2'b01 e 2'b10 validadas.");
         end
 
         // --- 6. Teste do Mux 4:1 ---
@@ -250,7 +250,7 @@ module tb_datapath_aux;
         $display("==========================================================");
 
         if (errors == 0) begin
-            $display(">>> TODOS OS MODULOS AUXILIARES FORAM APROVADOS! <<<");
+            $display(">>> TODOS OS MÓDULOS AUXILIARES FORAM APROVADOS! <<<");
             $finish;
         end else begin
             $display(">>> FALHA NOS TESTES AUXILIARES! <<<");
