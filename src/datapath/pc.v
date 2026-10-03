@@ -18,9 +18,16 @@ module pc #(
     input  wire                  clk,    // Sinal de clock — borda de subida
     input  wire                  reset,  // Reset sincrono ou assincrono ativo em nivel alto
     input  wire [DATA_WIDTH-1:0] pc_in,  // Proximo endereco do PC
-    output wire [DATA_WIDTH-1:0] pc_out  // Endereco atual fornecido a memoria de instrucoes
+    output reg  [DATA_WIDTH-1:0] pc_out  // Endereco atual fornecido a memoria de instrucoes
 );
 
-    // TODO: Implementar a logica sequencial do registrador PC
+    // Logica sequencial do registrador PC com reset assincrono ativo em nivel alto
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            pc_out <= {DATA_WIDTH{1'b0}};
+        end else begin
+            pc_out <= pc_in;
+        end
+    end
 
 endmodule

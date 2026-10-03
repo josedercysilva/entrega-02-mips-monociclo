@@ -21,6 +21,7 @@ module adder #(
     output wire [DATA_WIDTH-1:0] result  // Resultado da soma — a + b
 );
 
-    // TODO: Implementar a logica combinacional de soma
+    // Logica combinacional de soma parametrizada
+    assign result = a + b;
 
 endmodule

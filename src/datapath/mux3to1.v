@@ -22,6 +22,9 @@ module mux3to1 #(
     output wire [DATA_WIDTH-1:0] y    // Saida multiplexada
 );
 
-    // TODO: Implementar a logica do multiplexador 3:1
+    // Logica combinacional de selecao 3 para 1 (RegDst e MemtoReg com suporte a JAL)
+    assign y = (sel == 2'b00) ? d0 :
+               (sel == 2'b01) ? d1 :
+               (sel == 2'b10) ? d2 : {DATA_WIDTH{1'b0}};
 
 endmodule

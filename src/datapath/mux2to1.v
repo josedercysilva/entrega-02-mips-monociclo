@@ -21,6 +21,7 @@ module mux2to1 #(
     output wire [DATA_WIDTH-1:0] y    // Saida multiplexada
 );
 
-    // TODO: Implementar a logica do multiplexador 2:1
+    // Logica combinacional de selecao 2 para 1
+    assign y = sel ? d1 : d0;
 
 endmodule
