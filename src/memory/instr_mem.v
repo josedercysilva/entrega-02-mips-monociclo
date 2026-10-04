@@ -19,7 +19,7 @@ module instr_mem #(
     parameter DATA_WIDTH = 32,
     parameter ADDR_WIDTH = 32,
     parameter MEM_DEPTH  = 256,
-    parameter INIT_FILE  = "tb/programa_teste.hex"
+    parameter INIT_FILE  = "tb/programa_teste.bin"
 ) (
     input  wire [ADDR_WIDTH-1:0] addr,
     output wire [DATA_WIDTH-1:0] instr
@@ -28,9 +28,9 @@ module instr_mem #(
     // Array de memória ROM
     reg [DATA_WIDTH-1:0] rom [0:MEM_DEPTH-1];
 
-    // Inicialização da ROM a partir de arquivo hexadecimal
+    // Inicialização da ROM a partir de arquivo binário
     initial begin
-        $readmemh(INIT_FILE, rom);
+        $readmemb(INIT_FILE, rom);
     end
 
     // Leitura combinacional (assíncrona) indexada por palavra

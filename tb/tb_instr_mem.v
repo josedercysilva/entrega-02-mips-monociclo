@@ -26,7 +26,7 @@ module tb_instr_mem;
         .DATA_WIDTH(DATA_WIDTH),
         .ADDR_WIDTH(ADDR_WIDTH),
         .MEM_DEPTH(256),
-        .INIT_FILE("tb/programa_teste.hex")
+        .INIT_FILE("tb/programa_teste.bin")
     ) uut (
         .addr(addr),
         .instr(instr)
@@ -37,7 +37,7 @@ module tb_instr_mem;
         $display("   Iniciando Testbench da Memória de Instruções (Fase 3)  ");
         $display("==========================================================");
         
-        #10; // Aguarda a inicialização estática via $readmemh
+        #10; // Aguarda a inicialização estática via $readmemb
         
         // 1. Lendo endereço 0
         tests = tests + 1;
