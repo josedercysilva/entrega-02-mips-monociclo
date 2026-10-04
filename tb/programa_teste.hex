@@ -1,0 +1,8 @@
+// Programa de Teste Unitário para a ROM
+// Endereço base: 0x00400000 (MIPS) - Mapeado para 0, 1, 2, 3 no array
+00000000
+11111111
+22222222
+33333333
+AAAABBBB
+CCCCDDDD
