@@ -1,35 +1,58 @@
 // ============================================================================
 // Universidade Federal do Amazonas - UFAM
 // Faculdade de Engenharia Elétrica e da Computação - FEEC
-// Disciplina: Arquitetura de Sistemas Digitais e Laboratorio
+// Disciplina: Arquitetura de Sistemas Digitais e Laboratório
 // Manaus, Amazonas, Brasil
-// Desenvolvido com auxilio de: Gemini 3.8 Flash — High
+// Autor: José Dercy Vieira da Silva Filho <josedercysilva@gmail.com>
+// Desenvolvido com auxílio de: Google Antigravity (Google DeepMind) — Gemini 3.8 Flash
 // ----------------------------------------------------------------------------
-// Modulo: reg_file — Banco de Registradores Parametrizado
-// Descricao: Banco com 32 registradores de 32 bits conforme a arquitetura MIPS.
-//            Possui duas portas de leitura assincronas, read_data1 e read_data2,
-//            e uma porta de escrita sincrona na borda de subida do clock.
-//            O registrador $0 — $zero — e fixo em zero, cuja leitura sempre retorna 0.
+// Módulo: reg_file — Banco de Registradores
+// Descrição: Array de 32 registradores de 32 bits. Leitura assíncrona dupla
+//            e escrita síncrona simples. Registrador $0 é constante (zero).
 // ============================================================================
 
 `timescale 1ns / 1ps
 
 module reg_file #(
-    parameter DATA_WIDTH = 32, // Largura dos dados em bits — 32 bits
-    parameter ADDR_WIDTH = 5,  // Largura de enderecamento de registradores — 5 bits para 32 regs
-    parameter NUM_REGS   = 32  // Quantidade total de registradores
+    parameter DATA_WIDTH = 32,
+    parameter NUM_REGS   = 32,
+    parameter ADDR_WIDTH = 5 // log2(32)
 ) (
-    input  wire                  clk,        // Sinal de clock do sistema
-    input  wire                  reset,      // Sinal de reinicializacao
-    input  wire                  reg_write,  // Habilita escrita no registrador
-    input  wire [ADDR_WIDTH-1:0] read_reg1,  // Endereco do registrador fonte 1 — rs
-    input  wire [ADDR_WIDTH-1:0] read_reg2,  // Endereco do registrador fonte 2 — rt
-    input  wire [ADDR_WIDTH-1:0] write_reg,  // Endereco do registrador destino de escrita
-    input  wire [DATA_WIDTH-1:0] write_data, // Dado a ser gravado no registrador destino
-    output wire [DATA_WIDTH-1:0] read_data1, // Conteudo lido da porta 1
-    output wire [DATA_WIDTH-1:0] read_data2  // Conteudo lido da porta 2
+    input  wire                  clk,
+    input  wire                  reset,
+    
+    // Controle
+    input  wire                  reg_write,
+    
+    // Leitura
+    input  wire [ADDR_WIDTH-1:0] read_reg1,
+    input  wire [ADDR_WIDTH-1:0] read_reg2,
+    output wire [DATA_WIDTH-1:0] read_data1,
+    output wire [DATA_WIDTH-1:0] read_data2,
+    
+    // Escrita
+    input  wire [ADDR_WIDTH-1:0] write_reg,
+    input  wire [DATA_WIDTH-1:0] write_data
 );
 
-    // TODO: Implementar a logica do banco de registradores
+    // Array de registradores
+    reg [DATA_WIDTH-1:0] registers [0:NUM_REGS-1];
+    
+    integer i;
+    
+    // Escrita síncrona
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            for (i = 0; i < NUM_REGS; i = i + 1) begin
+                registers[i] <= {DATA_WIDTH{1'b0}};
+            end
+        end else if (reg_write && write_reg != {ADDR_WIDTH{1'b0}}) begin
+            registers[write_reg] <= write_data;
+        end
+    end
+    
+    // Leitura combinacional (assíncrona)
+    assign read_data1 = (read_reg1 == {ADDR_WIDTH{1'b0}}) ? {DATA_WIDTH{1'b0}} : registers[read_reg1];
+    assign read_data2 = (read_reg2 == {ADDR_WIDTH{1'b0}}) ? {DATA_WIDTH{1'b0}} : registers[read_reg2];
 
 endmodule
