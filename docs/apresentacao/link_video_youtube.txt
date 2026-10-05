@@ -10,7 +10,7 @@ https://youtu.be/SEU_LINK_AQUI (Substituir pela URL definitiva após o upload)
 Processador MIPS Monociclo com Instruções de Desvio em Verilog HDL (FPGA Intel MAX 10) | UFAM
 
 3. INTEGRANTES:
-- José Dercy Vieira da Silva Filho (Líder de Integração, DevOps e ULA)
+- José Dercy Vieira da Silva Filho (Integração, DevOps e ULA)
 - Vinicius Menezes (Unidade de Controle e Banco de Registradores)
 - Isabela Furtado (Subsistema de Memória e Top-Level)
 
@@ -35,3 +35,4 @@ Processador MIPS Monociclo com Instruções de Desvio em Verilog HDL (FPGA Intel
 
 6. REPOSITÓRIO GITHUB:
 https://github.com/josedercysilva/entrega-02-mips-monociclo
+
