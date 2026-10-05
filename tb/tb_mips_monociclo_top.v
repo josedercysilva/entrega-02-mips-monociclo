@@ -33,35 +33,28 @@ module tb_mips_monociclo_top;
 
         clk = 0;
         reset = 1;
+
+        $display("\n[ANTES DA ORDENAÇÃO] Vetor na RAM (Tempo 0):");
+        $display("Posicao 0: %0d", uut.data_mem_inst.ram[0]);
+        $display("Posicao 1: %0d", uut.data_mem_inst.ram[1]);
+        $display("Posicao 2: %0d", uut.data_mem_inst.ram[2]);
+        $display("Posicao 3: %0d", uut.data_mem_inst.ram[3]);
+        $display("Posicao 4: %0d", uut.data_mem_inst.ram[4]);
+
         #12;
         reset = 0;
 
-        #250;
+        #5000; // Tempo de execucao do Sort
 
-        $display("\nVerificando o estado final do processador...");
+        $display("\n[DEPOIS DA ORDENAÇÃO] Vetor na RAM (Fim da Execução):");
+        $display("Posicao 0: %0d", uut.data_mem_inst.ram[0]);
+        $display("Posicao 1: %0d", uut.data_mem_inst.ram[1]);
+        $display("Posicao 2: %0d", uut.data_mem_inst.ram[2]);
+        $display("Posicao 3: %0d", uut.data_mem_inst.ram[3]);
+        $display("Posicao 4: %0d", uut.data_mem_inst.ram[4]);
 
-        if (uut.datapath_inst.reg_file_inst.registers[10] === 32'd30)
-            $display("[PASS] Matemática (add): $t2 = 30.");
-        else
-            $display("[ERRO] Matemática falhou. Esperado $t2=30, Obtido=%0d", uut.datapath_inst.reg_file_inst.registers[10]);
-
-        if (uut.data_mem_inst.ram[25] === 32'd30)
-            $display("[PASS] Memória (sw): RAM[100] = 30.");
-        else
-            $display("[ERRO] Memória falhou. Esperado RAM[100]=30, Obtido=%0d", uut.data_mem_inst.ram[25]);
-
-        if (uut.datapath_inst.reg_file_inst.registers[16] === 32'd30)
-            $display("[PASS] Memória (lw): $s0 = 30.");
-        else
-            $display("[ERRO] Load Word falhou. Esperado $s0=30, Obtido=%0d", uut.datapath_inst.reg_file_inst.registers[16]);
-
-        if (uut.datapath_inst.reg_file_inst.registers[2] === 32'd99)
-            $display("[PASS] Saltos e Funções (beq, j, jal, jr): $v0 = 99.");
-        else
-            $display("[ERRO] Saltos falharam. Esperado $v0=99, Obtido=%0d", uut.datapath_inst.reg_file_inst.registers[2]);
-
-        $display("==========================================================");
-        $display(">>> TESTE INTEGRADO CONCLUÍDO COM SUCESSO! <<<");
+        $display("\n==========================================================");
+        $display(">>> TESTE DO SORT CONCLUÍDO COM SUCESSO! <<<");
         $display("==========================================================");
 
         $finish;

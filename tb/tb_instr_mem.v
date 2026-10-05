@@ -26,7 +26,7 @@ module tb_instr_mem;
         .DATA_WIDTH(DATA_WIDTH),
         .ADDR_WIDTH(ADDR_WIDTH),
         .MEM_DEPTH(256),
-        .INIT_FILE("tb/programa_teste.bin")
+        .INIT_FILE("tb/sort.bin")
     ) uut (
         .addr(addr),
         .instr(instr)
@@ -39,55 +39,55 @@ module tb_instr_mem;
         
         #10; // Aguarda a inicialização estática via $readmemb
         
-        // 1. Lendo endereço 0
+        // 1. Lendo endereço 0 (addi $sp, $sp, -20)
         tests = tests + 1;
         addr = 32'd0;
         #5;
-        if (instr !== 32'h00000000) begin
+        if (instr !== 32'h23bdffec) begin
             $display("[ERRO] Falha no endereço 0x0. Obtido: 0x%08h", instr);
             errors = errors + 1;
         end else begin
             $display("[PASS] Leitura do endereço 0x0 (Palavra 0) OK.");
         end
         
-        // 2. Lendo endereço 4 (Palavra 1)
+        // 2. Lendo endereço 4 (sw $ra, 16($sp))
         tests = tests + 1;
         addr = 32'd4;
         #5;
-        if (instr !== 32'h11111111) begin
+        if (instr !== 32'hafbf0010) begin
             $display("[ERRO] Falha no endereço 0x4. Obtido: 0x%08h", instr);
             errors = errors + 1;
         end else begin
             $display("[PASS] Leitura do endereço 0x4 (Palavra 1) OK.");
         end
         
-        // 3. Lendo endereço 8 (Palavra 2)
+        // 3. Lendo endereço 8 (sw $s3, 12($sp))
         tests = tests + 1;
         addr = 32'd8;
         #5;
-        if (instr !== 32'h22222222) begin
+        if (instr !== 32'hafb3000c) begin
             $display("[ERRO] Falha no endereço 0x8. Obtido: 0x%08h", instr);
             errors = errors + 1;
         end else begin
             $display("[PASS] Leitura do endereço 0x8 (Palavra 2) OK.");
         end
 
-        // 4. Lendo endereço 12 (Palavra 3)
+        // 4. Lendo endereço 12 (sw $s2, 8($sp))
         tests = tests + 1;
         addr = 32'd12;
         #5;
-        if (instr !== 32'h33333333) begin
+        if (instr !== 32'hafb20008) begin
             $display("[ERRO] Falha no endereço 0xC. Obtido: 0x%08h", instr);
             errors = errors + 1;
         end else begin
             $display("[PASS] Leitura do endereço 0xC (Palavra 3) OK.");
         end
 
-        // 5. Lendo endereço 16 (Palavra 4)
+        // 5. Lendo endereço 16 (sw $s1, 4($sp))
         tests = tests + 1;
         addr = 32'd16;
         #5;
-        if (instr !== 32'hAAAABBBB) begin
+        if (instr !== 32'hafb10004) begin
             $display("[ERRO] Falha no endereço 0x10. Obtido: 0x%08h", instr);
             errors = errors + 1;
         end else begin
