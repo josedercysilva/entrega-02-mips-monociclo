@@ -11,7 +11,7 @@ YELLOW="\033[0;33m"
 BOLD="\033[1m"
 RESET="\033[0m"
 
-MODULES=("alu" "reg_file" "control_unit" "instr_mem" "data_mem" "top")
+MODULES=("alu" "datapath_aux" "reg_file" "control_unit" "instr_mem" "data_mem" "top")
 PASSED=0
 FAILED=0
 declare -a FAILED_MODULES=()
@@ -24,10 +24,10 @@ for mod in "${MODULES[@]}"; do
     echo -e "\n${BOLD}==> Testando: ${mod}${RESET}"
     if "${SIM_SCRIPT}" "${mod}"; then
         echo -e "${GREEN}[APROVADO]${RESET} ${mod}"
-        ((PASSED++))
+        PASSED=$((PASSED + 1))
     else
         echo -e "${RED}[REPROVADO]${RESET} ${mod}"
-        ((FAILED++))
+        FAILED=$((FAILED + 1))
         FAILED_MODULES+=("${mod}")
     fi
 done
