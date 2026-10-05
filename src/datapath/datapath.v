@@ -21,6 +21,7 @@ module datapath #(
     input  wire                  jump,
     input  wire                  jal,
     input  wire                  branch,
+    input  wire                  bne,
     input  wire [1:0]            mem_to_reg,
     input  wire [3:0]            alu_ctrl,
     input  wire                  alu_src,
@@ -84,7 +85,7 @@ module datapath #(
     );
 
     // Selecao do proximo PC (Branch, Jump e JR)
-    wire                  pc_src = branch & zero;
+    wire                  pc_src = (branch & zero) | (bne & ~zero);
     wire [ADDR_WIDTH-1:0] pc_next_branch;
     wire [ADDR_WIDTH-1:0] pc_jump = {pc_plus_4[31:28], target26, 2'b00};
     wire [ADDR_WIDTH-1:0] pc_next_jump;
@@ -160,6 +161,7 @@ module datapath #(
     ) alu_inst (
         .src_a(read_data1),
         .src_b(alu_operand_b),
+        .shamt(instr[10:6]),
         .alu_ctrl(alu_ctrl),
         .alu_result(alu_res),
         .zero(zero)

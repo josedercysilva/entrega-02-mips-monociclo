@@ -24,6 +24,7 @@ module control_unit #(
     output wire                      jump,       // Sinal de desvio incondicional
     output wire                      jal,        // Sinal de desvio com link
     output wire                      branch,     // Sinal de desvio condicional beq
+    output wire                      bne,        // Sinal de desvio condicional bne
     output wire                      mem_read,   // Leitura da memoria de dados
     output wire [1:0]                mem_to_reg, // Seleciona origem do dado para escrita no registrador
     output wire [ALU_CTRL_WIDTH-1:0] alu_ctrl,   // Controle de 4 bits para a ALU
@@ -45,6 +46,7 @@ module control_unit #(
         .jump(jump),
         .jal(jal),
         .branch(branch),
+        .bne(bne),
         .mem_read(mem_read),
         .mem_to_reg(mem_to_reg),
         .alu_op(alu_op_wire),

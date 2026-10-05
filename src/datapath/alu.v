@@ -22,6 +22,7 @@ module alu #(
 ) (
     input  wire [DATA_WIDTH-1:0]     src_a,
     input  wire [DATA_WIDTH-1:0]     src_b,
+    input  wire [4:0]                shamt,
     input  wire [ALU_CTRL_WIDTH-1:0] alu_ctrl,
     output reg  [DATA_WIDTH-1:0]     alu_result,
     output wire                      zero
@@ -39,6 +40,7 @@ module alu #(
             4'b0000: alu_result = src_a & src_b;
             4'b0001: alu_result = src_a | src_b;
             4'b0010: alu_result = sum;
+            4'b0011: alu_result = src_b << shamt;
             4'b0110: alu_result = sum;
             4'b0111: alu_result = {{DATA_WIDTH-1{1'b0}}, slt};
             4'b1100: alu_result = ~(src_a | src_b);

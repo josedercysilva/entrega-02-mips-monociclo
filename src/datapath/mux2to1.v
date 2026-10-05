@@ -24,6 +24,7 @@ module mux2to1 #(
     output wire [DATA_WIDTH-1:0] y   
 );
 
+
     assign y = sel ? d1 : d0;
 
 endmodule

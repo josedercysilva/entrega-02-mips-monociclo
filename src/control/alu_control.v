@@ -26,7 +26,8 @@ module alu_control #(
 );
 
     // Codigos do campo funct (Tipo-R)
-    localparam [FUNCT_WIDTH-1:0] FUNCT_JR  = 6'b001000,
+    localparam [FUNCT_WIDTH-1:0] FUNCT_SLL = 6'b000000,
+                                 FUNCT_JR  = 6'b001000,
                                  FUNCT_ADD = 6'b100000,
                                  FUNCT_SUB = 6'b100010,
                                  FUNCT_AND = 6'b100100,
@@ -38,6 +39,7 @@ module alu_control #(
     localparam [ALU_CTRL_WIDTH-1:0] ALU_AND = 4'b0000,
                                     ALU_OR  = 4'b0001,
                                     ALU_ADD = 4'b0010,
+                                    ALU_SLL = 4'b0011,
                                     ALU_SUB = 4'b0110,
                                     ALU_SLT = 4'b0111,
                                     ALU_NOR = 4'b1100;
@@ -51,6 +53,7 @@ module alu_control #(
             2'b01: alu_ctrl = ALU_SUB; // beq
             2'b10: begin               // Tipo-R
                 case (funct)
+                    FUNCT_SLL: alu_ctrl = ALU_SLL;
                     FUNCT_ADD: alu_ctrl = ALU_ADD;
                     FUNCT_SUB: alu_ctrl = ALU_SUB;
                     FUNCT_AND: alu_ctrl = ALU_AND;
@@ -64,6 +67,7 @@ module alu_control #(
                     default: alu_ctrl = ALU_AND;
                 endcase
             end
+            2'b11: alu_ctrl = ALU_SLT; // slti
             default: alu_ctrl = ALU_AND;
         endcase
     end
