@@ -46,6 +46,10 @@ module reg_file #(
             for (i = 0; i < NUM_REGS; i = i + 1) begin
                 registers[i] <= {DATA_WIDTH{1'b0}};
             end
+            // Bootloader para o sort.bin funcionar no hardware limpo:
+            registers[29] <= 32'd256; // $sp aponta para o fim da RAM
+            registers[4]  <= 32'd0;   // $a0 (Ponteiro do array) aponta para endereço 0
+            registers[5]  <= 32'd5;   // $a1 (Tamanho) = 5
         end else if (reg_write && write_reg != {ADDR_WIDTH{1'b0}}) begin
             registers[write_reg] <= write_data;
         end

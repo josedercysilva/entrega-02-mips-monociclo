@@ -19,7 +19,7 @@ module instr_mem #(
     parameter DATA_WIDTH = 32,
     parameter ADDR_WIDTH = 32,
     parameter MEM_DEPTH  = 256,
-    parameter INIT_FILE  = "tb/programa_teste.bin"
+    parameter INIT_FILE  = "tb/sort.bin"
 ) (
     input  wire [ADDR_WIDTH-1:0] addr,
     output wire [DATA_WIDTH-1:0] instr
@@ -35,8 +35,9 @@ module instr_mem #(
 
     // Leitura combinacional (assíncrona) indexada por palavra
     // Como os endereços do MIPS avançam de 4 em 4 bytes (0, 4, 8...),
-    // ignoramos os 2 bits menos significativos (addr[1:0]) para acessar
-    // os índices da matriz (0, 1, 2...).
-    assign instr = rom[addr[ADDR_WIDTH-1:2]];
+    // e o MARS tenta usar a base 0x00400000, nós pegamos apenas os 
+    // bits [9:2]. Isso joga a base alta no lixo e espelha a execução perfeitamente
+    // dentro do nosso array de 256 palavras locais!
+    assign instr = rom[addr[9:2]];
 
 endmodule
