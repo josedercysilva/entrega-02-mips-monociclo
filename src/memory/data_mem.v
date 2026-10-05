@@ -32,12 +32,23 @@ module data_mem #(
 
     // Leitura assíncrona combinacional
     // Opcionalmente protegida por mem_read para evitar leituras indevidas
-    assign read_data = mem_read ? ram[addr[ADDR_WIDTH-1:2]] : {DATA_WIDTH{1'b0}};
+    // Vetor inicial a ser ordenado
+    initial begin
+        ram[0] = 32'd88;
+        ram[1] = 32'd15;
+        ram[2] = 32'd42;
+        ram[3] = 32'd7;
+        ram[4] = 32'd99;
+    end
+
+    // Usamos addr[9:2] para evitar estouro de limite (out-of-bounds) caso
+    // o código assembly grave em endereços do topo da memória (ex: stack)
+    assign read_data = mem_read ? ram[addr[9:2]] : {DATA_WIDTH{1'b0}};
 
     // Escrita síncrona
     always @(posedge clk) begin
         if (mem_write) begin
-            ram[addr[ADDR_WIDTH-1:2]] <= write_data;
+            ram[addr[9:2]] <= write_data;
         end
     end
 

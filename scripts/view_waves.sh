@@ -11,9 +11,6 @@ RESET="\033[0m"
 TARGET="${1:-}"
 
 if [[ -n "${TARGET}" ]]; then
-    if [[ "${TARGET}" == "top" ]]; then
-        TARGET="mips_monociclo_top"
-    fi
     VCD_FILE="${BUILD_DIR}/${TARGET}.vcd"
     if [[ ! -f "${VCD_FILE}" ]]; then
         VCD_FILE="${ROOT_DIR}/${TARGET}.vcd"

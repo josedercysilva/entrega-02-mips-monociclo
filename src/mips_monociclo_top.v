@@ -34,6 +34,7 @@ module mips_monociclo_top #(
     wire                  jump_ctrl;
     wire                  jal_ctrl;
     wire                  branch_ctrl;
+    wire                  bne_ctrl;
     wire                  mem_read_ctrl;
     wire [1:0]            mem_to_reg_ctrl;
     wire [3:0]            alu_ctrl_bus;
@@ -63,6 +64,7 @@ module mips_monociclo_top #(
         .jump(jump_ctrl),
         .jal(jal_ctrl),
         .branch(branch_ctrl),
+        .bne(bne_ctrl),
         .mem_read(mem_read_ctrl),
         .mem_to_reg(mem_to_reg_ctrl),
         .alu_ctrl(alu_ctrl_bus),
@@ -82,6 +84,7 @@ module mips_monociclo_top #(
         .jump(jump_ctrl),
         .jal(jal_ctrl),
         .branch(branch_ctrl),
+        .bne(bne_ctrl),
         .mem_to_reg(mem_to_reg_ctrl),
         .alu_ctrl(alu_ctrl_bus),
         .alu_src(alu_src_ctrl),
