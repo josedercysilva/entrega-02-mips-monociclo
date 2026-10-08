@@ -14,6 +14,7 @@ a.out
 quartus/db/
 quartus/incremental_db/
 quartus/output_files/
+quartus/simulation/
 db/
 incremental_db/
 output_files/
