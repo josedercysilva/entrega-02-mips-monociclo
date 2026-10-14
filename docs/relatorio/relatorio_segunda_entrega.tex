@@ -1,4 +1,7 @@
 \documentclass[conference]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
@@ -8,25 +11,31 @@
 \usepackage{url}
 
 \usepackage{listings}
+\usepackage{booktabs}
+\usepackage{microtype}
+
+% Configuração global dos listings
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    backgroundcolor=\color{gray!6},
+    frame=single,
+    rulecolor=\color{black!30},
+    numbers=none,
+    xleftmargin=3pt,
+    xrightmargin=3pt,
+    framesep=3pt,
+    breaklines=true,
+    showstringspaces=false,
+    captionpos=b
+}
 
 % Configuração de estilo visual para código C
 \lstdefinestyle{estiloC}{
     language=C,
-    basicstyle=\ttfamily\footnotesize,
     keywordstyle=\color{blue}\bfseries,
     commentstyle=\color{green!50!black},
     stringstyle=\color{purple},
-    numbers=left,
-    numberstyle=\tiny\color{gray},
-    stepnumber=1,
-    numbersep=6pt,
-    backgroundcolor=\color{gray!6},
-    frame=single,
-    rulecolor=\color{black!30},
-    tabsize=2,
-    breaklines=true,
-    showstringspaces=false,
-    captionpos=b
+    tabsize=2
 }
 
 % Configuração de estilo visual para código MIPS Assembly
@@ -35,41 +44,24 @@
     sensitive=false,
     morecomment=[l]{\#},
     morestring=[b]",
-    basicstyle=\ttfamily\footnotesize,
     keywordstyle=\color{blue}\bfseries,
     commentstyle=\color{green!50!black},
     stringstyle=\color{purple},
-    numbers=left,
-    numberstyle=\tiny\color{gray},
-    stepnumber=1,
-    numbersep=6pt,
-    backgroundcolor=\color{gray!6},
-    frame=single,
-    rulecolor=\color{black!30},
-    tabsize=4,
-    breaklines=true,
-    showstringspaces=false,
-    captionpos=b
+    tabsize=4
 }
 
 % Configuração de estilo visual para descrição em Verilog HDL
 \lstdefinestyle{estiloVerilog}{
     language=Verilog,
-    basicstyle=\ttfamily\footnotesize,
     keywordstyle=\color{blue}\bfseries,
     commentstyle=\color{green!50!black},
     stringstyle=\color{purple},
-    numbers=left,
-    numberstyle=\tiny\color{gray},
-    stepnumber=1,
-    numbersep=6pt,
-    backgroundcolor=\color{gray!6},
-    frame=single,
-    rulecolor=\color{black!30},
-    tabsize=2,
-    breaklines=true,
-    showstringspaces=false,
-    captionpos=b
+    tabsize=2
+}
+
+% Configuração de estilo visual para terminal/log
+\lstdefinestyle{estiloTerminal}{
+    basicstyle=\ttfamily\scriptsize
 }
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em

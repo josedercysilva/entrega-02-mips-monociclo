@@ -1,9 +1,19 @@
 @book{patterson_mips,
   author    = {David A. Patterson and John L. Hennessy},
-  title     = {Computer Organization and Design: The Hardware / Software Interface},
-  edition   = {4th revised},
-  publisher = {Academic Press},
-  year      = {2012}
+  title     = {Computer Organization and Design: The Hardware/Software Interface},
+  edition   = {5th},
+  publisher = {Morgan Kaufmann},
+  address   = {Waltham, MA},
+  year      = {2014}
+}
+
+@book{harris_harris_2013,
+  author    = {David Money Harris and Sarah L. Harris},
+  title     = {Digital Design and Computer Architecture},
+  edition   = {2nd},
+  publisher = {Morgan Kaufmann},
+  address   = {Waltham, MA},
+  year      = {2013}
 }
 
 @misc{brito_instrucoes,
@@ -14,29 +24,37 @@
   year         = {2026}
 }
 
-@misc{mars_simulator,
-  author       = {Pete Sanderson and Kenneth Vollmar},
-  title        = {{MARS} -- {MIPS} Assembler and Runtime Simulator},
-  howpublished = {Missouri State University},
-  year         = {2014},
-  url          = {https://computerscience.missouristate.edu/mars-mips-simulator.htm}
+@inproceedings{mars_simulator,
+  author    = {Kenneth Vollmar and Pete Sanderson},
+  title     = {{MARS: An Education-Oriented MIPS Assembly Language Simulator}},
+  booktitle = {Proceedings of the 37th SIGCSE Technical Symposium on Computer Science Education},
+  pages     = {239--243},
+  year      = {2006},
+  publisher = {ACM}
 }
 
-@manual{gnu_binutils,
-  author       = {{Free Software Foundation}},
-  title        = {{GNU Binutils Manual}},
-  organization = {Free Software Foundation},
-  year         = {2024},
-  url          = {https://sourceware.org/binutils/docs/}
+@manual{intel_quartus_handbook,
+  title        = {{Intel Quartus Prime Standard Edition User Guide: Design Compilation}},
+  author       = {{Intel Corporation}},
+  organization = {Intel Corporation},
+  edition      = {20.1},
+  year         = {2020},
+  note         = {Documento UG-20131}
 }
 
 @manual{terasic_de10_lite_user_manual,
-  title        = {{DE10-Lite User Manual}},
+  title        = {{DE10-Lite User Manual: Intel MAX 10 FPGA}},
   author       = {{Terasic Technologies}},
   organization = {Terasic Inc.},
   edition      = {1.3},
-  year         = {2017},
-  url          = {https://www.terasic.com.tw/}
+  year         = {2017}
+}
+
+@misc{icarus_verilog,
+  author       = {Stephen Williams},
+  title        = {{Icarus Verilog Simulation and Synthesis Tool}},
+  howpublished = {\url{http://iverilog.icarus.com/}},
+  year         = {2020}
 }
 
 @standard{verilog_std,
@@ -44,15 +62,5 @@
   organization = {Institute of Electrical and Electronics Engineers},
   number       = {IEEE Std 1364-2005},
   year         = {2006},
-  url          = {https://standards.ieee.org/}
-}
-
-% Exemplo de referência não citada no texto para comprovar a omissão automática:
-@article{referencia_exemplo_nao_citada,
-  author  = {Alan Turing},
-  title   = {On Computable Numbers, with an Application to the Entscheidungsproblem},
-  journal = {Proceedings of the London Mathematical Society},
-  volume  = {42},
-  pages   = {230--265},
-  year    = {1936}
+  doi          = {10.1109/IEEESTD.2006.99495}
 }
