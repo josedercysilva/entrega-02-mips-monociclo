@@ -7,21 +7,21 @@ A Tabela \ref{tab:requisitos} sintetiza o atendimento formal aos requisitos téc
 \centering
 \caption{Síntese do Atendimento aos Requisitos do Projeto}
 \label{tab:requisitos}
-\footnotesize
-\begin{tabular}{lp{4.0cm}c}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lp{4.2cm}c}
 \toprule
 \textbf{Item} & \textbf{Requisito Técnico} & \textbf{Status} \\
 \midrule
 \textbf{Item 1} & Configuração do ambiente (Quartus e ferramentas). & 100\% \\
 \textbf{Item 2} & Caminho de dados com saltos (\texttt{j}, \texttt{jal}, \texttt{jr}). & 100\% \\
 \textbf{Item 3} & Validação de todos os módulos via testbenches. & 100\% \\
-\textbf{Item 4} & Código 100\% parametrizado (\texttt{parameter}). & 100\% \\
-\textbf{Item 5} & Apresentação em vídeo e relatório técnico no modelo IEEE. & 100\% \\
+\textbf{Item 4} & Parametrização integral (\texttt{parameter}). & 100\% \\
+\textbf{Item 5} & Apresentação em vídeo e relatório no padrão IEEE. & 100\% \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\enlargethispage{2\baselineskip}
 \subsection{Conclusão e Trabalhos Futuros}
 O desenvolvimento da Segunda Avaliação consolidou a implementação de um processador MIPS Monociclo de 32 bits em Verilog HDL. O hardware incorporou suporte às instruções \texttt{sll}, \texttt{slti} e \texttt{bne} para viabilizar a execução do algoritmo \texttt{sort.bin}. Além disso, implementou-se o mascaramento de barramento na memória ROM e a inicialização de registradores no reset para contornar o modelo de memória virtual do simulador MARS.
 
