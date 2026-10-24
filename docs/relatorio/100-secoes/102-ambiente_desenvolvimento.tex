@@ -12,7 +12,7 @@ O processo de compilação física divide-se em três etapas acionadas via termi
     \item \texttt{quartus\_asm}: geração do arquivo binário de configuração final em formato \texttt{.sof}.
 \end{enumerate}
 
-A programação física na placa ocorre pelo utilitário \texttt{quartus\_pgm} através da interface JTAG, previamente detectada pelo utilitário \texttt{jtagconfig} conectado ao gravador USB-Blaster integrado da placa DE10-Lite.
+A gravação física na placa é realizada via interface JTAG com o gravador USB-Blaster integrado, utilizando o utilitário \texttt{quartus\_pgm} após detecção com \texttt{jtagconfig}.
 
 \subsection{Ferramentas de Simulação e Verificação RTL}
 Para acelerar o ciclo de depuração temporal, empregou-se o compilador de simulação Icarus Verilog através do comando \texttt{iverilog} e seu motor de execução \texttt{vvp} \cite{icarus_verilog}. As formas de onda dos barramentos e sinais de controle foram exportadas para arquivos em formato VCD e inspecionadas graficamente no visualizador GTKWave.

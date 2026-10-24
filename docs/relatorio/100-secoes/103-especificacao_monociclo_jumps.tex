@@ -1,36 +1,60 @@
 \section{Especificação Arquitetural e Adaptações de Hardware}
 
-A microarquitetura do processador MIPS monociclo implementa o conjunto fundamental de instruções MIPS32 sob modelo Harvard com barramentos independentes para instruções e dados \cite{patterson_mips}.
+A microarquitetura do processador MIPS monociclo adota o modelo Harvard com memórias e barramentos estritamente independentes para instruções (ROM) e dados (RAM) \cite{patterson_mips}, como ilustrado no netlist de topo gerado pelo sintetizador na Fig. \ref{fig:rtl_netlist_top}. Em uma topologia monociclo com tempo de instrução unitário ($\text{CPI} = 1$), a separação de memórias constitui uma restrição física absoluta: instruções de leitura e escrita em memória (\texttt{lw} e \texttt{sw}) realizam a busca da instrução e o acesso ao dado no mesmo ciclo de relógio. Uma arquitetura Von Neumann com memória unificada sofreria um conflito estrutural insolúvel (\textit{structural hazard}), inviabilizando a execução monociclo sem ciclos de espera.
 
 \subsection{Caminho de Dados Parametrizado (Datapath)}
-O caminho de dados no módulo \texttt{datapath.v} possui parametrização integral com \texttt{parameter DATA\_WIDTH = 32} e \texttt{ADDR\_WIDTH = 32} em conformidade com o padrão IEEE 1364-2005 \cite{verilog_std}. Os blocos fundamentais articulam-se da seguinte forma:
+O caminho de dados em \texttt{datapath.v} adota parametrização integral sob a norma IEEE Std 1364-2005 \cite{verilog_std}, com parâmetros de largura \texttt{DATA\_WIDTH} e \texttt{ADDR\_WIDTH} fixados em 32 bits. Essa definição propaga-se estruturalmente aos submódulos (\texttt{pc.v}, \texttt{adder.v}, \texttt{alu.v}, \texttt{reg\_file.v} e \texttt{mux2to1.v}), cujos barramentos derivam da expressão \texttt{[DATA\_WIDTH-1:0]} (Fig. \ref{fig:param_datapath}).
 
+Cabe ressaltar que os campos estruturais de decodificação da instrução, como opcode (\texttt{[31:26]}), índices de registradores (\texttt{[25:21]}, \texttt{[20:16]}, \texttt{[15:11]}), \texttt{shamt} (\texttt{[10:6]}) e \texttt{funct} (\texttt{[5:0]}), representam constantes normativas invariantes da arquitetura MIPS32 \cite{patterson_mips}. Alterá-los comprometeria a conformidade com compiladores e montadores padrão.
+
+\begin{figure}[htbp]
+\centering
+\begin{lstlisting}[style=estiloVerilog]
+module datapath #(
+    parameter DATA_WIDTH = 32,
+    parameter ADDR_WIDTH = 32
+)(
+    input  wire                  clk, reset,
+    input  wire [DATA_WIDTH-1:0] instr,
+    input  wire [DATA_WIDTH-1:0] mem_read_data,
+    output wire [ADDR_WIDTH-1:0] pc_out,
+    output wire [ADDR_WIDTH-1:0] alu_result,
+    output wire [DATA_WIDTH-1:0] mem_write_data,
+    output wire [5:0]            opcode, funct,
+    output wire                  zero
+);
+\end{lstlisting}
+\caption{Declaração parametrizada da entidade topológica do Datapath (\texttt{datapath.v}).}
+\label{fig:param_datapath}
+\end{figure}
+
+Os blocos fundamentais do caminho de dados articulam-se da seguinte forma:
 \begin{itemize}
-    \item Banco de registradores (\texttt{reg\_file.v}): matriz de 32 registradores de 32 bits com duas portas de leitura combinacionais e uma porta de escrita síncrona na borda positiva do clock. O registrador \$0 é fixado em zero;
-    \item Unidade lógica e aritmética (\texttt{alu.v}): módulo combinacional que executa operações aritméticas e lógicas. A subtração reaproveita a estrutura do somador computando $A + \overline{B} + 1$, a comparação \texttt{slt} emprega avaliação com sinal via \texttt{\$signed}, e o deslocamento \texttt{sll} opera pelo campo \texttt{shamt} da instrução ($B \ll \text{shamt}$), conforme ilustrado na Fig. \ref{fig:esquematico_alu};
+    \item Banco de registradores (\texttt{reg\_file.v}): matriz parametrizada de 32 registradores de 32 bits com duas portas de leitura combinacionais e escrita síncrona na borda positiva do clock. O registrador \$0 é fixado permanentemente em zero;
+    \item Unidade lógica e aritmética (\texttt{alu.v}): módulo combinacional que executa operações aritméticas e lógicas. A subtração reaproveita o somador computando $A + \overline{B} + 1$, a comparação \texttt{slt} opera via avaliação com sinal (\texttt{\$signed}), e o deslocamento \texttt{sll} opera pelo campo \texttt{shamt} ($B \ll \text{shamt}$), conforme ilustrado na Fig. \ref{fig:esquematico_alu};
     \item Sinalizador de zero: computado por redução unária rápida $\text{zero} = \sim|\,\text{alu\_result}$, determinando a condição de branch;
     \item Extensor de sinal (\texttt{sign\_extend.v}): converte imediatos de 16 bits para 32 bits replicando o bit mais significativo.
 \end{itemize}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=1.00\columnwidth]{000-figuras/esquematico_alu.pdf}
+\includegraphics[width=0.88\columnwidth]{000-figuras/esquematico_alu.pdf}
 \caption{Esquemático estrutural da Unidade Lógica e Aritmética (ULA) de 32 bits com multiplexação de operações e sinalizador de zero.}
 \label{fig:esquematico_alu}
 \end{figure}
 
-A restrição temporal da microarquitetura monociclo impõe que o período mínimo de relógio ($T_{\text{clk}}$) acomode a propagação cumulativa da instrução de maior latência, tipicamente a leitura em memória (\texttt{lw}), definida analiticamente por:
+A restrição temporal da microarquitetura monociclo impõe que o período mínimo de relógio ($T_{\text{clk}}$) acomode a propagação cumulativa da instrução de maior latência do conjunto (\texttt{lw}), definida analiticamente por:
 \begin{equation}
     T_{\text{clk}} \ge t_{\text{pc}} + t_{\text{rom}} + t_{\text{rf\_read}} + t_{\text{alu}} + t_{\text{ram}} + t_{\text{mux}} + t_{\text{rf\_setup}}
 \end{equation}
-onde os termos denotam as latências do PC, memórias de instruções e dados, leitura e setup do banco de registradores, ULA e multiplexação. Essa limitação de desempenho justifica diretamente a segmentação em estágios de pipeline no projeto evolutivo do processador.
+onde os termos denotam as latências do contador de programa, ROM, leitura do banco de registradores, ULA, RAM, multiplexadores e setup de escrita. Essa relação constitui uma restrição física absoluta que limita a frequência máxima de operação ($F_{\text{max}}$) do monociclo, fundamentando a necessidade da divisão em múltiplos estágios no processador em pipeline.
 
 \subsection{Lógica de Seleção de Próximo PC e Saltos}
 No módulo \texttt{datapath.v}, a seleção do endereço da próxima instrução é materializada pela instanciação estrutural dos multiplexadores \texttt{mux\_branch}, \texttt{mux\_jump} e \texttt{mux\_jr} em cascata de prioridade. Esse circuito conecta as saídas intermediárias \texttt{pc\_next\_branch} e \texttt{pc\_next\_jump} até convergir no barramento final \texttt{next\_pc}, conforme esquematizado na Fig. \ref{fig:next_pc}.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.92\columnwidth]{000-figuras/esquematico_next_pc.pdf}
+\includegraphics[width=0.85\columnwidth]{000-figuras/esquematico_next_pc.pdf}
 \caption{Esquemático da lógica de seleção do próximo PC em cascata no caminho de dados (\texttt{beq}, \texttt{bne}, \texttt{j}, \texttt{jal} e \texttt{jr}).}
 \label{fig:next_pc}
 \end{figure}
@@ -50,7 +74,7 @@ A lógica de decisão obedece à seguinte estrutura hierárquica:
     \item Retorno de função com instrução \texttt{jr}: o multiplexador final seleciona entre o resultado dos estágios anteriores e o dado do registrador \texttt{read\_data1} via sinal \texttt{jr}, garantindo prioridade no fechamento do ciclo.
 \end{enumerate}
 
-A unidade de controle possui uma trava de segurança para o sinal de escrita:
+A unidade de controle possui uma trava de segurança combinacional para o sinal de escrita:
 \begin{equation}
     \text{reg\_write} = \text{reg\_write\_wire} \land \overline{\text{jr}}
 \end{equation}
@@ -67,16 +91,47 @@ O hardware incorporou suporte nativo a três instruções requeridas pelo algori
     \item Instrução \texttt{bne}: o opcode \texttt{000101} foi integrado à lógica combinacional de desvio.
 \end{itemize}
 
-\subsubsection{Bypass de Endereçamento do MARS}
-O montador MARS \cite{mars_simulator} aloca o segmento de código a partir do endereço virtual \texttt{0x00400000}. Para evitar violação de barramento na memória física local de 256 palavras, implementou-se uma máscara na ROM:
+\subsubsection{Bypass de Endereçamento do MARS: Trade-off de Engenharia}
+O montador MARS \cite{mars_simulator} aloca o segmento de código no endereço virtual canônico \texttt{0x00400000}, pressupondo uma infraestrutura completa de sistema operacional com suporte a memória virtual. Em uma implementação acadêmica \textit{bare-metal} sintetizada diretamente em FPGA, a concepção de uma unidade de gerenciamento de memória (MMU) ou tabela de translação acrescentaria complexidade desnecessária e latência combinacional proibitiva no caminho crítico de busca.
+
+Adotou-se, portanto, um \textit{trade-off} temporário de engenharia em nível de hardware, descartando os 22 bits mais significativos via máscara combinacional na memória ROM:
 \begin{lstlisting}[style=estiloVerilog]
 assign instr = rom[addr[9:2]]; // Indexa palavras locais
 \end{lstlisting}
-Esta máscara ignora os 22 bits mais significativos, viabilizando o mapeamento direto das instruções do simulador para a memória estática em silício.
+Essa decisão técnica não constitui uma solução definitiva para sistemas de propósito geral, pois introduz sobreposição de endereços (\textit{aliasing}) caso o espaço endereçável ultrapasse a capacidade física local de 256 palavras. Todavia, representa a escolha ótima para a Segunda Avaliação, garantindo latência zero, consumo nulo de recursos lógicos adicionais e execução fiel do binário original sem qualquer modificação em software.
 
-\subsubsection{Bootloader de Hardware no Reset}
-O procedimento \texttt{sort} pressupõe pilha inicializada e argumentos nos registradores \texttt{\$a0} e \texttt{\$a1}. O registrador de reset do banco de registradores atribui:
-\begin{equation}
-    \text{sp} \leftarrow 256, \quad \text{a0} \leftarrow 0, \quad \text{a1} \leftarrow 5
-\end{equation}
-Essa inicialização posiciona o topo da pilha no limite da memória RAM e direciona o vetor para a base da memória de dados.
+\subsubsection{Emulação de Ambiente de Execução (C-Runtime/SO Loader) no Hardware Bare-Metal}
+Em sistemas computacionais convencionais sob controle de um sistema operacional (SO), a carga e a execução de um binário envolvem rotinas de baixo nível providas pelo carregador do SO (\textit{program loader}) e pelo código de inicialização do C-Runtime (\texttt{crt0.o}). Essas entidades configuram o ambiente de execução antes da invocação do programa: alocam espaço na memória de dados, preenchem vetores globais ou estáticos, inicializam o ponteiro de pilha (\$sp) no topo da memória do processo e carregam os parâmetros formais nos registradores de argumento (\$a0, \$a1) conforme a convenção de chamadas (MIPS ABI) \cite{patterson_mips}.
+
+No cenário \textit{bare-metal} sobre FPGA, a ausência de um sistema operacional e de um montador com biblioteca de \textit{runtime} impõe que o próprio hardware assuma o papel do SO Loader e do C-Runtime. Para que o binário \texttt{sort.bin} operasse de forma estritamente autônoma, essa emulação foi materializada em dois pontos complementares da arquitetura, conforme detalhado na Fig. \ref{fig:baremetal_loader}:
+\begin{enumerate}
+    \item \textbf{C-Runtime na Memória de Dados (\texttt{data\_mem.v})}: o bloco \texttt{initial} pré-aloca o vetor não ordenado $[88, 15, 42, 7, 99]$ nas primeiras cinco posições contíguas da RAM (\texttt{ram[0]} a \texttt{ram[4]}), emulando a carga do segmento de dados estáticos;
+    \item \textbf{SO Loader no Registrador (\texttt{reg\_file.v})}: durante o pulso de reset síncrono, a lógica interna pré-configura os registradores arquiteturais da ABI:
+    \begin{equation}
+        \text{sp} \leftarrow 256, \quad \text{a0} \leftarrow 0, \quad \text{a1} \leftarrow 5
+    \end{equation}
+    fixando o topo da pilha no limite da memória RAM (\texttt{\$sp} = 256) e passando os parâmetros da chamada nos registradores de argumento \texttt{\$a0} (endereço 0) e \texttt{\$a1} (tamanho 5).
+\end{enumerate}
+
+Essa estratégia assegura que, ao ser liberado do reset com o contador de programa em zero, o processador encontre o estado arquitetural perfeitamente consistente com as pré-condições do software, viabilizando a ordenação imediata e sem intervenções externas.
+
+\begin{figure}[htbp]
+\centering
+\begin{lstlisting}[style=estiloVerilog]
+// 1. C-Runtime: carga do array na RAM (data_mem.v)
+initial begin
+    ram[0] = 32'd88;
+    ram[1] = 32'd15;
+    ram[2] = 32'd42;
+    ram[3] = 32'd7;
+    ram[4] = 32'd99;
+end
+
+// 2. SO Loader: bootloader no reset (reg_file.v)
+registers[29] <= 32'd256; // $sp no topo da RAM
+registers[4]  <= 32'd0;   // $a0 = base do vetor (0)
+registers[5]  <= 32'd5;   // $a1 = tamanho (5)
+\end{lstlisting}
+\caption{Emulação de C-Runtime e SO Loader no hardware \textit{bare-metal} (\texttt{data\_mem.v} e \texttt{reg\_file.v}).}
+\label{fig:baremetal_loader}
+\end{figure}
