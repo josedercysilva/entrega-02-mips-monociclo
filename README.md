@@ -1,128 +1,89 @@
-# Processador MIPS Monociclo de 32 bits (Segunda Entrega)
+# Processador MIPS Monociclo de 32 bits
 
-Projeto desenvolvido para a disciplina de **Arquitetura de Sistemas Digitais e Laboratório** do **Instituto de Computação (IComp)** da **Universidade Federal do Amazonas (UFAM)** — Manaus, Amazonas.
-
-Esta segunda entrega contempla o projeto, implementação em Verilog HDL e validação do processador **MIPS Monociclo de 32 bits**, parametrizado e com suporte completo a instruções de desvio incondicional (*Jumps*: `j`, `jal`, `jr`), testado através da execução do algoritmo de ordenação (*Bubble Sort* - rotinas `sort` e `swap`).
+> **Segunda Entrega** da disciplina de **Arquitetura de Sistemas Digitais e Laboratório**  
+> **Universidade Federal do Amazonas (UFAM)** — Faculdade de Engenharia Elétrica e da Computação (FEEC)  
+> **Autores:** José Dercy Vieira da Silva Filho e Vinicius Menezes  
+> **Plataforma Alvo:** FPGA Intel MAX 10 (`10M50DAF484C7G`) — Placa Terasic DE10-Lite  
 
 ---
 
-## Ambiente de Desenvolvimento e Ferramentas
+## Visão Geral
 
-A tabela a seguir documenta as ferramentas utilizadas no ciclo de desenvolvimento, simulação, síntese, montagem e documentação do projeto, com suas respectivas versões identificadas no ambiente de trabalho:
+Implementação em Verilog HDL de um processador **MIPS Monociclo de 32 bits** sob a norma IEEE Std 1364-2005. O projeto adota arquitetura **Harvard** com memórias e barramentos estritamente desacoplados para instruções (ROM) e dados (RAM), garantindo execução com $\text{CPI} = 1$.
 
-| Categoria | Ferramenta | Versão | Função no Projeto |
-| :--- | :--- | :--- | :--- |
-| **Simulação e Validação RTL** | **Icarus Verilog (`iverilog`)** | `13.0 (stable)` | Compilador e simulador HDL obrigatório para a execução dos *testbenches* unitários e validação do Top-Level. |
-| **Simulação e Validação RTL** | **GTKWave** | `3.3.128` | Visualizador de formas de onda utilizado para a inspeção temporal dos sinais gerados nos arquivos de *dump* (`.vcd`). |
-| **Síntese e Prototipagem** | **Intel Quartus Prime (Lite Edition)** | `19.1.0 Build 670 SJ` | Ambiente de síntese lógica, mapeamento da pinagem e roteamento direcionado ao chip **Intel MAX 10** (FPGA DE10-Lite). |
-| **Síntese e Prototipagem** | **Drivers USB-Blaster / USB-Blaster II** | `19.1.0 (udev/jtagd)` | Interface de comunicação física necessária para a gravação do arquivo de programação na placa Altera DE10-Lite. |
-| **Tradução e Memória** | **MARS (MIPS Assembler & Runtime Simulator)** | `4.5` | Ambiente de montagem e depuração comportamental do algoritmo de ordenação, utilizado primariamente para validar a lógica dos desvios. |
-| **Tradução e Memória** | **`mips-linux-gnu-binutils` (GNU Binutils)** | `2.45.1` | Conjunto de utilitários acionado para a extração do código de máquina bruto, garantindo a geração do arquivo hexadecimal (`.hex`) para a inicialização da ROM. |
-| **Versionamento e Documentação** | **Git** | `2.55.0` | Infraestrutura de versionamento submetida às regras de proteção de *branch* e validação de contratos de interface. |
-| **Versionamento e Documentação** | **Tectonic** | `0.17.0` | Motor de tipografia moderno acionado via terminal para a compilação autônoma do relatório técnico no padrão `IEEEtran`. |
-
-### Detalhamento das Ferramentas
-
-#### 1. Simulação e Validação RTL
-* **Icarus Verilog (`13.0`):** Utilizado para compilar e executar todos os bancos de teste (`tb/tb_*.v`). Garante a verificação comportamental antes da etapa de síntese em hardware.
-* **GTKWave (`3.3.128`):** Empregado na análise visual de temporização, transições de clock, escrita no banco de registradores e leitura da memória de dados.
-
-#### 2. Síntese e Prototipagem em Hardware
-* **Intel Quartus Prime Lite Edition (`19.1.0`):** Responsável pela síntese lógica, geração do RTL Viewer e estimativa de uso de elementos lógicos para o FPGA Intel MAX 10 (`10M50DAF484C7G`).
-* **Drivers USB-Blaster II:** Configurados via regras de dispositivo (*udev rules*) no Linux para comunicação JTAG transparente com a placa DE10-Lite.
-
-#### 3. Tradução de Software e Memória
-* **MARS (`4.5`):** Utilizado para teste comportamental do código Assembly das rotinas `sort` e `swap`, inspeção de registradores e validação dos saltos incondicionais e links (`jal` / `jr`).
-* **mips-linux-gnu-binutils (`2.45.1`):** *Cross-assembler* e utilitários (`objcopy`, `objdump`) utilizados no pipeline automatizado de conversão de assembly MIPS para formato legível pelo `$readmemh` da memória de instruções.
-
-#### 4. Controle de Versão e Documentação
-* **Git (`2.55.0`):** Gestão e rastreabilidade de código-fonte, histórico de commits e organização das entregas parciais.
-* **Tectonic (`0.17.0`):** Compilação de passo único do relatório técnico em LaTeX (`docs/relatorio/relatorio_segunda_entrega.tex`), resolvendo automaticamente dependências do `IEEEtran` e BibTeX.
+O processador foi validado ponta a ponta executando o algoritmo canônico de ordenação (*Sort*) de Patterson & Hennessy (`sort.s` $\to$ `sort.bin`), em regime puramente *bare-metal* sobre lógica reconfigurável, integrando suporte completo a desvios e saltos (`beq`, `bne`, `j`, `jal` e `jr`).
 
 ---
 
 ## Estrutura do Repositório
 
 ```text
-
 .
-├── contexto
-│   ├── especificacao-entrega2-integra-classroom.md
-│   ├── especificacao-geral-disciplina.md
-│   ├── projeto-arquitetura-integra.md
-│   └── rubricas-entrega-02.md
-├── docs
-│   ├── apresentacao
-│   │   ├── link_video_youtube.txt
-│   │   └── slides_apresentacao.pdf
-│   └── relatorio
-│       ├── 000-figuras
-│       │   ├── diagrama_datapath.png
-│       │   └── wave_jumps.png
-│       ├── 100-secoes
-│       │   ├── 100-metadados.tex
-│       │   ├── 101-introducao.tex
-│       │   ├── 102-ambiente_desenvolvimento.tex
-│       │   ├── 103-especificacao_monociclo_jumps.tex
-│       │   ├── 104-testbenches_resultados.tex
-│       │   ├── 105-consideracoes_finais.tex
-│       │   └── 106-bibliografia.tex
-│       ├── 200-bib
-│       │   ├── IEEEabrv.bib
-│       │   ├── IEEEexample.bib
-│       │   ├── IEEEfull.bib
-│       │   ├── IEEEtranS.bst
-│       │   └── referencias.bib
-│       ├── compilar.sh
-│       ├── IEEEtran.bst
-│       ├── IEEEtran.cls
-│       ├── README.md
-│       ├── relatorio_segunda_entrega.pdf
-│       └── relatorio_segunda_entrega.tex
-├── .gemini
-│   └── rules.md
-├── .github
-│   └── PULL_REQUEST_TEMPLATE.md
-├── .gitignore
-├── hex
-│   ├── machine_code.bin
-│   └── sort_swap.hex
-├── LICENSE
-├── quartus
-│   ├── mips_monociclo.qpf
-│   └── mips_monociclo.qsf
-├── README.md
-├── .README.md.kate-swp
-├── scripts
-│   ├── run_simulation.sh
-│   └── view_waves.sh
-├── src
-│   ├── control
-│   │   ├── alu_control.v
-│   │   ├── control_unit.v
-│   │   └── main_control.v
-│   ├── datapath
-│   │   ├── adder.v
-│   │   ├── alu.v
-│   │   ├── datapath.v
-│   │   ├── mux2to1.v
-│   │   ├── mux3to1.v
-│   │   ├── mux4to1.v
-│   │   ├── pc.v
-│   │   ├── reg_file.v
-│   │   └── sign_extend.v
-│   ├── memory
-│   │   ├── data_mem.v
-│   │   └── instr_mem.v
-│   └── mips_monociclo_top.v
-└── tb
-    ├── tb_alu.v
-    ├── tb_control_unit.v
-    ├── tb_instr_mem.v
-    ├── tb_mips_monociclo_top.v
-    └── tb_reg_file.v
-
-
+├── Makefile                # Orquestrador de testes, simulação, síntese e documentação
+├── docs/                   # Documentação técnica e científica
+│   ├── apresentacao/       # Slides em LaTeX Beamer e link do vídeo da sabatina
+│   └── relatorio/          # Relatório técnico no formato IEEE (6 páginas em LaTeX)
+├── quartus/                # Projeto de síntese física para FPGA Intel MAX 10 (.qpf / .qsf)
+├── scripts/                # Scripts de automação para simulação e GTKWave
+├── src/                    # Código-fonte Verilog HDL do processador
+│   ├── control/            # Unidade de Controle (main_control, alu_control, control_unit)
+│   ├── datapath/           # Caminho de dados (alu, pc, reg_file, somadores e multiplexadores)
+│   ├── memory/             # Subsistema Harvard (ROM instr_mem e RAM data_mem)
+│   └── mips_monociclo_top.v# Nível de topo estrutural interconectando os módulos
+├── tb/                     # Suíte de 7 bancadas de teste e binário do benchmark sort
+└── hex/                    # Arquivos auxiliares de código de máquina (.hex / .bin)
 ```
 
+---
 
+## Repertório de Instruções Suportado
+
+O conjunto de 13 instruções foi selecionado para atender de forma ótima aos procedimentos `sort` (não-folha) e `swap` (folha) da convenção MIPS ABI:
+
+| Formato | Instruções | Função no Algoritmo |
+| :---: | :--- | :--- |
+| **Tipo-R** | `add`, `sub`, `and`, `or`, `nor`, `slt` | Operações aritméticas, lógicas e comparações com sinal |
+| **Tipo-R** | `sll` | Indexação de palavras do vetor na memória ($j \times 4 \equiv j \ll 2$) |
+| **Tipo-R** | `jr` | Retorno de função via registrador `$ra` com trava de proteção |
+| **Tipo-I** | `lw`, `sw` | Acesso de leitura e escrita na memória de dados (RAM) |
+| **Tipo-I** | `addi`, `slti` | Alocação de pilha (`$sp`), incrementos e avaliação de parada (`j < 0`) |
+| **Tipo-I** | `beq`, `bne` | Desvios condicionais por igualdade e diferença nos laços |
+| **Tipo-J** | `j`, `jal` | Salto incondicional e chamada de sub-rotina com salvamento de `PC + 4` em `$ra` |
+
+---
+
+## Guia Rápido de Execução
+
+Todo o fluxo de compilação, simulação, síntese e documentação é encapsulado no `Makefile`:
+
+```bash
+# Executa a suíte de regressão completa (7 testbenches, 48 testes)
+make test
+
+# Simula a integração top-level executando o algoritmo sort.bin
+make top
+
+# Inspeciona as formas de onda da última simulação no GTKWave
+make waves-top
+
+# Executa a síntese física completa no Intel Quartus Prime (gera bitstream .sof)
+make quartus-build
+
+# Grava o bitstream (.sof) no FPGA MAX 10 via USB-Blaster
+make quartus-pgm
+
+# Compila o relatório técnico IEEE em PDF via Tectonic
+make relatorio
+```
+
+---
+
+## Resumo de Resultados e Validação
+
+* **Simulação Comportamental (Icarus Verilog):** 48 testes automatizados em 7 bancadas unitárias e de integração com **100% de aprovação (0 falhas)**.
+* **Benchmark Sort:** Ordenação comprovada do vetor de `[88, 15, 42, 7, 99]` para `[7, 15, 42, 88, 99]`.
+* **Síntese Física (Intel MAX 10 `10M50DAF484C7G`):**
+  * 17.089 Logic Elements (LEs) e 131 pinos de E/S.
+  * **0 latches transparentes espúrios** (lógica 100% síncrona e combinacional coberta).
+  * Distribuição de relógio via redes dedicadas globais `CLKCTRL_G3` e `CLKCTRL_G4`.
+* **Documentação Científica:** Artigo técnico de 6 páginas balanceadas no padrão IEEE Transactions compilado em [`docs/relatorio/relatorio_segunda_entrega.pdf`](file:///home/jdercy/01-dev/03-periodos-ufam/08-periodo/01-arquitetura/entrega-02-mips-monociclo/docs/relatorio/relatorio_segunda_entrega.pdf).
