@@ -1,12 +1,15 @@
 # Diretrizes e Regras do Projeto MIPS Monociclo (Entrega 02)
 
+> **Autor das Regras e Mantenedor do Repositório (GitHub):** José Dercy Silva (<josedercysilva@gmail.com>)
+
 Este documento define o contexto operacional, convenções arquiteturais e restrições obrigatórias para o assistente **Antigravity** neste repositório.
 
 ---
 
 ## 1. Identificação do Projeto e Equipe
 - **Disciplina:** Arquitetura de Sistemas Digitais e Laboratório (UFAM)
-- **Equipe:** José Dercy Vieira da Silva Filho, Vinicius Menezes, Isabela Furtado
+- **Autor e Mantenedor:** José Dercy Silva (<josedercysilva@gmail.com>)
+- **Equipe:** José Dercy Vieira da Silva Filho, Vinicius Menezes.
 - **Plataforma Alvo:** FPGA Intel MAX 10 / Altera DE10-Lite (10M50DAF484C7G)
 - **Software de Síntese:** Intel Quartus Prime
 - **Simulação RTL:** Icarus Verilog e GTKWave (`scripts/run_simulation.sh`)
@@ -49,18 +52,18 @@ Para conformidade estrita com o roteiro da disciplina:
 - Modelo obrigatório: **IEEE Conference (`IEEEtran`)**
 - Bibliografia: Gerenciada via BibTeX em `200-bib/referencias.bib` com estilo `IEEEtran.bst`. Omissão automática de referências não citadas e numeração sequencial de citações.
 
-
-
-
-////
-
 ---
 
 ## 5. Fluxo de Trabalho e Versionamento (GitHub)
 - **Gestão do Repositório (José Dercy):**
-  - **Branch Protection:** Proibido push direto na `main`. Tudo ocorre via Pull Request (PR).
+  - **Branch Protection:** Proibido push direto na `main`. Tudo ocorre via Pull Request (PR) com revisão e aprovação mandatória do mantenedor (@josedercysilva).
   - **Contratos (Skeletons):** O desenvolvimento de qualquer módulo começa pela criação da estrutura contendo apenas as declarações de portas (`input`, `output`, `parameter`) para garantir nomes de sinais padronizados.
-  - **Critério de Aceitação de PR:** Um módulo só está concluído e pronto para merge se vier acompanhado de seu respectivo `testbench` unitário rodando sem erros no Icarus Verilog/GTKWave.
+  - **Critérios de Aceitação de PR (conforme `.github/PULL_REQUEST_TEMPLATE.md`):**
+    1. **Contrato de Interface:** Portas (`input`/`output`) e parâmetros (`DATA_WIDTH`, etc.) mantidos rigorosamente conforme o skeleton.
+    2. **Testbench Unitário:** Arquivo de teste correspondente criado ou atualizado em `tb/`.
+    3. **Simulação RTL:** Compilação e execução local sem erros via Icarus Verilog (`scripts/run_simulation.sh`).
+    4. **Validação Visual:** Formas de onda inspecionadas no GTKWave atestando o circuito lógico.
+    5. **Commit Limpo:** Proibido versionar artefatos de build ou temporários (`.vcd`, `.out`, `.vvp`, pastas do Quartus).
 
 ## 6. Divisão de Responsabilidades
 - **José Dercy Vieira da Silva Filho (Integração, DevOps e Documentação):** Automação (`scripts/`), projeto Quartus, módulo ULA (`alu.v`), integração Top-Level (`mips_monociclo_top.v`), simulação geral com geração das formas de onda finais, redação do Relatório Técnico em LaTeX e montagem dos slides para o vídeo de defesa.

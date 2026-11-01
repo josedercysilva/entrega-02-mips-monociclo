@@ -53,14 +53,14 @@ test:
 
 quartus:
 	@echo "Executando Análise e Elaboração no Intel Quartus Prime..."
-	@mkdir -p quartus/tb
-	@cp tb/sort.bin quartus/tb/
+	@mkdir -p quartus/assembly-mips
+	@cp assembly-mips/sort.bin quartus/assembly-mips/
 	@cd quartus && quartus_map mips_monociclo --analysis_and_elaboration
 
 quartus-build:
 	@echo "==> [1/3] Análise e Síntese (quartus_map)..."
-	@mkdir -p quartus/tb
-	@cp tb/sort.bin quartus/tb/
+	@mkdir -p quartus/assembly-mips
+	@cp assembly-mips/sort.bin quartus/assembly-mips/
 	@cd quartus && quartus_map mips_monociclo
 	@echo "==> [2/3] Mapeamento e Roteamento (quartus_fit)..."
 	@cd quartus && quartus_fit mips_monociclo
