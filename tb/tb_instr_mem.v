@@ -26,7 +26,7 @@ module tb_instr_mem;
         .DATA_WIDTH(DATA_WIDTH),
         .ADDR_WIDTH(ADDR_WIDTH),
         .MEM_DEPTH(256),
-        .INIT_FILE("tb/sort.bin")
+        .INIT_FILE("assembly-mips/sort.bin")
     ) uut (
         .addr(addr),
         .instr(instr)

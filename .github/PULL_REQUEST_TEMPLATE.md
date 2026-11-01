@@ -17,4 +17,5 @@ Para aprovação e integração na branch `main`, marque todos os itens abaixo c
 - [ ] **4. Validação Visual (GTKWave):** As formas de onda foram inspecionadas e atestam o comportamento esperado do circuito lógico.
 - [ ] **5. Commit Limpo:** Nenhum artefato de compilação ou arquivo temporário (`.vcd`, `.out`, `.vvp`, diretórios do Quartus) foi incluído no repositório.
 
-> Política de Integração: Pull Requests sem testbench anexado ou com falha de simulação serão rejeitados.
+> **Política de Integração:** Pull Requests sem testbench anexado ou com falha de simulação serão rejeitados.
+> **Revisão e Aprovação:** Aprovação obrigatória do mantenedor do repositório (@josedercysilva / José Dercy Silva) antes do merge na `main`.
