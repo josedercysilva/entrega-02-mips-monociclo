@@ -1,0 +1,1 @@
+.gemini/rules.md

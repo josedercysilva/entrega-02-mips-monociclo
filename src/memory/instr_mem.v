@@ -19,7 +19,7 @@ module instr_mem #(
     parameter DATA_WIDTH = 32,
     parameter ADDR_WIDTH = 32,
     parameter MEM_DEPTH  = 256,
-    parameter INIT_FILE  = "tb/sort.bin"
+    parameter INIT_FILE  = "assembly-mips/sort.bin"
 ) (
     input  wire [ADDR_WIDTH-1:0] addr,
     output wire [DATA_WIDTH-1:0] instr

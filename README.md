@@ -30,8 +30,8 @@ O processador foi validado ponta a ponta executando o algoritmo canônico de ord
 │   ├── datapath/           # Caminho de dados (alu, pc, reg_file, somadores e multiplexadores)
 │   ├── memory/             # Subsistema Harvard (ROM instr_mem e RAM data_mem)
 │   └── mips_monociclo_top.v# Nível de topo estrutural interconectando os módulos
-├── tb/                     # Suíte de 7 bancadas de teste e binário do benchmark sort
-└── hex/                    # Arquivos auxiliares de código de máquina (.hex / .bin)
+├── assembly-mips/         # Códigos Assembly (.s), benchmark Sort e firmware (.bin)
+└── tb/                    # Suíte de 7 bancadas de teste unitárias e de integração
 ```
 
 ---
